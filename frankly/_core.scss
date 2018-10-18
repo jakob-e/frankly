@@ -1,38 +1,263 @@
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  🔩 The nuts and bolts 
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
+//  ·············································································
+//  
+//  🔩 The Nuts & Bolts
+//
+//  ·············································································
+//
+//  🔩 List functions
+//
+//  list($values, $format...)        => list      
+//
+//  nth-get($list, $n)               => value     
+//  nth-set($list, $n, $value)       => list
+//  nth-delete($list, $n)            => list
+//  nth-index($list, $n)             => n  
+//
+//  first($list)                     => value 
+//  last($list)                      => value 
+//  last-index($list, $value)        => n
+//
+//  prepend($list, $value)           => list
+//  reverse($list)                   => list
+//  unique($list)                    => list
+//
+//  sort($list, $ascending: true)    => list
+//  
+//  ·············································································
+
+//  ▪ list 
+//  Creates and or reformat a list allowing you to predefine how the 
+//  list should be formatted (space/comma separator and bracketed)
+//  
+//  $list: list((), space, false)       empty space separated list without brackets
+//  $list: list(foo bar, comma)         comma separated list containing foo and bar
+//  
+//  if the values list contains formatting this will be used unless a format is provided    
+//  $list: list([x, y])                 comma separated bracketed list
+//
+//  You can also inherit the format of an existing list by passing that list as format.
+//  This is useful if you want to make list alterations and have the returned list
+//  formatted as the list passed. 
+//
+//  @function ($list) { 
+//     $new-list: (); 
+//     ... do stuff 
+//     @return list($new-list, $list); 
+//  } 
+//
+
+@function list($values: (), $format...) {
+    $list: if(length($format) == 1 and type-of($format...) == list, nth($format, 1), null);
+    $separator: if($list, list-separator($list), nth-get($format, 1) or list-separator($values) or auto);
+    $bracketed: if($list, is-bracketed($list), 
+                if(nth-get($format, 2) != null, nth-get($format, 2), is-bracketed($values)));
+    @return join((), $values, $separator, $bracketed);
+}
+
+
+//  ▪ nth-get
+//  Similar to the native nth function but without 
+//  index out of bounds error allowing a more casual
+//  use e.g. when handling conditionals
+//  
+//  @function ($list) {
+//     prop-1: nth-get($list, 2) or something-else; 
+//     prop-2: nth-get($list, 2);   
+//  } 
+//  note! null will cause prop-2 not to render 
+// 
+//  $list: a b c d;
+//  nth-get($list,  2)  => b    (2nd item from start)  
+//  nth-get($list, -2)  => c    (2nd item from end)
+//  nth-get($list, 22)  => null
+// 
+@function nth-get($list, $n) { 
+    $n: nth-index($list, $n);
+    @return if(length($list) < $n, null, nth($list, $n));
+}
+
+
+//  ▪ nth-set
+//  Similar to the native set-nth function but without 
+//  index out of bounds error instead returning the  
+//  original list if no nth match without inserting.
+//
+//  $list: a b c d;
+//  nth-set($list,  2, 👻)  => a 👻 c d   
+//  nth-set($list, -2, 👻)  => a b 👻 d    
+//  nth-get($list, 22, 👻)  => a b c d e
+// 
+@function nth-set($list, $n, $value) { 
+    $n: nth-index($list, $n);
+    @return if(length($list) < $n, $list, set-nth($list, $n, $value));
+}
+
+
+//  ▪ nth-delete
+//  Deletes a value from a list based on index. like nth-get and 
+//  nth-set passing a negative index will delete from the back
+//  of the list. 
+// 
+@function nth-delete($list, $n) {
+    $result: ();
+    $n: nth-index($list, $n);
+    @for $i from 1 through length($list){
+        @if $i != $n { $result: append($result, nth($list, $i)); }
+    }
+    @return list($result, $list);
+}
+
+
+//  ▪ nth-index
+//  Helper function to calculate index from the back of a list
+//  if a negative n value is passed. Error handling in case of
+//  an out of bounds index is ignored and to be handled by the
+//  calling function or mixin.
+@function nth-index($list, $n) {
+    @return if($n < 0, length($list) + $n + 1, $n);
+}
+
+
+//  ▪ first
+//  Shorthand function to return the first item in a list.
+@function first($list) {
+    @return nth-get($list, 1);
+}
+
+
+//  ▪ last
+//  Shorthand function to return the last item in a list.
+@function last($list) {
+    @return nth-get($list, -1);
+}
+
+
+//  ▪ last-index
+//  Similar to the native index function but returning the 
+//  last found index of a matched value.
+@function last-index($list, $value) {
+    @for $i from length($list) through 1 {
+        @if nth($list, $i) == $value { @return $i; }
+    }
+    @return null;
+}
+
+
+//  ▪ prepend
+//  Similar to append but adds the value to the beginning of a list.
+@function prepend($list, $value) {
+    @return list(append((), $value), $list);
+}
+
+
+//  ▪ reverse
+//  Reverses a list. 
+@function reverse($list) {
+    $result: ();
+    @for $i from length($list) through 1 {
+        $result: append($result, nth($list, $i));
+    }
+    @return list($result, $list);
+}
+
+
+//  ▪ unique
+//  Removes duplicate items in a list.
+//
+//  $list: a b a b c d c e;  =>   a b c d e    
+@function unique($list) { 
+    $result: ();
+    @for $i from 1 through length($list) {
+        $value: nth($list, $i);
+        @if not index($result, $value) { 
+            $result: append($result, $value); 
+        }
+    }
+    @return list($result, $list);
+}
+
+
+//  ▪ sort
+//  sorts a list containing numbers (including comparable units)
+//  by default the sort order is ascending
+@function sort($list, $ascending: true) { 
+    $result: ();
+    @while length($list) > 0 {
+        $min: min($list...);
+        $n: index($list, $min);
+        $list: nth-delete($list, $n);
+        $result: append($result, $min);
+    }
+    @return list(if($ascending, $result, reverse($result)), $list);
+}
 
 
 
 
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  List
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
+//  ·············································································
+//
+//  🔩 String functions
+//
+//  str-replace($string, $search, $replace: '')    => string
+//  str-split($string, $delimiter)                 => list
+//  str-join($list, $delimiter)                    => string
+//   
+//
+//
+//  
+//  ·············································································
+
+//  ▪ str-replace
+//  replaces a part of a string with a new replace value. if no replace
+//  value is provided matches will be replaced with '' – hence deleted. 
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+    @return if(index,
+        str-slice($string, 1, $index - 1) + $replace + 
+        str-replace(str-slice($string, $index + str-length($search)), $search, $replace),
+        $string
+    );
+}
 
 
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  String
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
 
+//  ·············································································
+//
+//  🔩 Map functions
+//
+//  ·············································································
+//  ▪ map-some
+//  Returns the map value if the key matches one of the keys in a
+//  map using lists as keys (e.g. wken providing aliases)
+//  $map:(
+//     extra-large xl: 24px,
+//     large lg l: 18px
+//     ...
+//  ) 
+//  map-some($map, l) =>  18px
+//
+@function map-some($map, $key){
+    @each $keys in map-keys($map) { @if index($keys, $key) { @return map-get($map, $keys); } } 
+    @return null;
+}
 
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  Map
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
+//  ·············································································
+//
+//  🔩 Color functions
+//
+//  ·············································································
 
+//  ·············································································
+//  
+//  🔩 Math functions
+//
+//  ·············································································
 
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  Color
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-
-
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  Math
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-
-
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
-//  Conversion
-//  ––––––––––––––––––––––––––––––––––––––––––––––––––
+//  ·············································································
+//  
+//  🔩 Unit conversion 
+//
+//  ·············································································
 
 
 
