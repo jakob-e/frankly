@@ -3,6 +3,25 @@
 //  🔩 The Nuts & Bolts
 //
 //  ·············································································
+
+
+
+//  compare
+@function is-equal($a, $b){
+  @return 
+      type-of($a) == type-of($b) and 
+      $a and $b and $a+'' == $b+'' or 
+      not $a and not $b;
+}
+@function index-equal($list, $value) {
+  @if length($list) == 0 { @return null; }
+  @for $n from 1 through length($list) { 
+    @if is-equal(nth($list, $n), $value) { @return $n }; 
+  }
+  @return null;
+}
+
+
 //
 //  🔩 List functions
 //
