@@ -19,7 +19,7 @@
 
 //  ▪ is-equal
 //  compares two values based on value, type and unit
-//  some sass versions would falsly equal 500 and 500px	
+//  some sass versions would falsely equal 500 and 500px	
 @function is-equal($a, $b){
   @return 
       type-of($a) == type-of($b) and 
