@@ -5,14 +5,31 @@
 //  ·············································································
 
 
+//  ·············································································
+//
+//  🔩 Introspection
+//
+//  ·············································································
+//  ▪ boolean
+@function is-true($value)   { @return $value == true; }
+@function is-false($value)  { @return $value == false; }
+@function is-null($value)   { @return $value == null; }
+@function is-falsy($value)  { @return $value == false or $value == null or $value == 0; }
+@function is-truthy($value) { @return not is-falsy($value); }   
 
-//  compare
+//  ▪ is-equal
+//  compares two values based on value, type and unit
+//  some sass versions would falsly equal 500 and 500px	
 @function is-equal($a, $b){
   @return 
       type-of($a) == type-of($b) and 
       $a and $b and $a+'' == $b+'' or 
       not $a and not $b;
 }
+
+//  ▪ index-equal
+//  like the native index function but with an is-equal check
+//  to ensure unit annd unitless are not treated equal
 @function index-equal($list, $value) {
   @if length($list) == 0 { @return null; }
   @for $n from 1 through length($list) { 
@@ -21,7 +38,51 @@
   @return null;
 }
 
+//  ▪ empty map, list, arglist or string
+@function is-empty($value)  { 
+  @return 
+    if(index(list map arglist, type-of($value)), length($value) == 0, 
+    if(index(string, type-of($value)), str-length($value) == 0, false));
+}
 
+//  ▪ type
+@function is-bool($value)   { @return type-of($value) == bool; }
+@function is-number($value) { @return type-of($value) == number; }
+@function is-string($value) { @return type-of($value) == string; }
+@function is-list($value)   { @return type-of($value) == list; }
+@function is-map($value)    { @return type-of($value) == map; }
+@function is-color($value)  { @return type-of($value) == color; } 
+@function is-arglist($value){ @return type-of($value) == arglist; }
+@function is-nan($value)    { @return not is-number($value); }
+
+//  ▪ unit
+@function is-px($value) { @return unit($value) == px; }
+@function is-pt($value) { @return unit($value) == pt; }
+@function is-pc($value) { @return unit($value) == pc; }
+@function is-in($value) { @return unit($value) == in; }
+@function is-mm($value) { @return unit($value) == mm; }
+@function is-cm($value) { @return unit($value) == cm; }
+@function is-q($value)  { @return unit($value) ==  q; }
+
+@function is-em($value)   { @return unit($value) ==   em; }
+@function is-rem($value)  { @return unit($value) ==  rem; }
+@function is-vw($value)   { @return unit($value) ==   vw; }
+@function is-vw($value)   { @return unit($value) ==   vh; }
+@function is-vmin($value) { @return unit($value) == vmin; }
+@function is-vmax($value) { @return unit($value) == vmax; }
+@function is-pct($value)  { @return unit($value) ==  '%'; }
+@function is-ex($value)   { @return unit($value) ==   ex; }
+@function is-ch($value)   { @return unit($value) ==   ch; }
+
+@function is-absolute($value) { @return index(px pt pc in mm cm q, unit($value)); }
+@function is-relative($value) { @return index(em rem vw vh vmin vmax ex ch '%', unit($value)); }
+@function is-angle($value)    { @return index(deg rad turn, unit($value)); } 
+@function is-time($value)     { @return index(ms s, unit($value)); } 
+@function is-frequency($value){ @return index(hz kHz, unit($value)); } 
+
+
+
+//  ·············································································
 //
 //  🔩 List functions
 //
