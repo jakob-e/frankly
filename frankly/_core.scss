@@ -25,7 +25,7 @@
 //
 //  🔩 List functions
 //
-//  list($values, $format...)        => list      
+//  list($args...)                   => list      
 //
 //  nth-get($list, $n)               => value     
 //  nth-set($list, $n, $value)       => list
@@ -48,6 +48,7 @@
 //  Creates and or reformat a list allowing you to predefine how the 
 //  list should be formatted (space/comma separator and bracketed)
 //  
+//  $list: list()                       creates an empty space separated list without brackets
 //  $list: list((), space, false)       empty space separated list without brackets
 //  $list: list(foo bar, comma)         comma separated list containing foo and bar
 //  
@@ -64,15 +65,23 @@
 //     @return list($new-list, $list); 
 //  } 
 //
-
-@function list($values: (), $format...) {
-    $list: if(length($format) == 1 and type-of($format...) == list, nth($format, 1), null);
-    $separator: if($list, list-separator($list), nth-get($format, 1) or list-separator($values) or auto);
-    $bracketed: if($list, is-bracketed($list), 
-                if(nth-get($format, 2) != null, nth-get($format, 2), is-bracketed($values)));
-    @return join((), $values, $separator, $bracketed);
+@function list($args...) { 
+	$a1: nth-get($args, 1);
+	$a2: nth-get($args, 2);
+	$a3: nth-get($args, 3);
+	$list: if(type-of($a1) == list, $a1, ());
+	$separator: 
+		if(type-of($a2) == list, list-separator($a2), 
+		if(index(space comma, $a2), $a2, 
+		if(index(space comma, $a3), $a3, 
+		list-separator($list))));
+	$bracketed: 
+		if(type-of($a2) == list, is-bracketed($a2), 
+		if(type-of($a2) == bool, $a2), $a2, 
+		if(type-of($a3) == bool, $a3, 
+		is-bracketed($list))));
+	@return	join((),$list,$separator,$bracketed);
 }
-
 
 //  ▪ nth-get
 //  Similar to the native nth function but without 
