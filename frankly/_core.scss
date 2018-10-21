@@ -131,7 +131,7 @@
 		list-separator($list))));
 	$bracketed: 
 		if(type-of($a2) == list, is-bracketed($a2), 
-		if(type-of($a2) == bool, $a2), $a2, 
+		if(type-of($a2) == bool, $a2, $a2, 
 		if(type-of($a3) == bool, $a3, 
 		is-bracketed($list))));
 	@return	join((),$list,$separator,$bracketed);
