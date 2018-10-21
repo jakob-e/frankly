@@ -2,12 +2,14 @@
 //  
 //  🔩 The Nuts & Bolts
 //
+//  Out of the box - native Sass functions:
+//  http://sass-lang.com/documentation/Sass/Script/Functions.html
+//
 //  ·············································································
 
-//	TODOs
-//	Update unique to include index-equal
-//		
-//
+
+
+
 
 //  ·············································································
 //
@@ -21,65 +23,76 @@
 @function is-truthy($value) { @return not is-falsy($value); }   
 @function is-falsy($value)  { @return list-index(false null 0, $value); }
 
+
+
 //  ▪ type
-@function is-bool($value)   { @return type-of($value) == bool; }
-@function is-number($value) { @return type-of($value) == number; }
-@function is-string($value) { @return type-of($value) == string; }
-@function is-list($value)   { @return type-of($value) == list; }
-@function is-map($value)    { @return type-of($value) == map; }
-@function is-color($value)  { @return type-of($value) == color; } 
-@function is-arglist($value){ @return type-of($value) == arglist; }
-@function is-nan($value)    { @return not is-number($value); }
+@function is-bool($value)    { @return type-of($value) == bool; }
+@function is-number($value)  { @return type-of($value) == number; }
+@function is-string($value)  { @return type-of($value) == string; }
+@function is-list($value)    { @return type-of($value) == list; }
+@function is-map($value)     { @return type-of($value) == map; }
+@function is-color($value)   { @return type-of($value) == color; } 
+@function is-arglist($value) { @return type-of($value) == arglist; }
+@function is-nan($value)     { @return not is-number($value); }
+
+
 
 //  ▪ unit
-@function is-px($value) { @return unit($value) == px; }
-@function is-pt($value) { @return unit($value) == pt; }
-@function is-pc($value) { @return unit($value) == pc; }
-@function is-in($value) { @return unit($value) == in; }
-@function is-mm($value) { @return unit($value) == mm; }
-@function is-cm($value) { @return unit($value) == cm; }
-@function is-q($value)  { @return unit($value) ==  q; }
+@function is-px($value) { @return unit-get($value) == px; }
+@function is-pt($value) { @return unit-get($value) == pt; }
+@function is-pc($value) { @return unit-get($value) == pc; }
+@function is-in($value) { @return unit-get($value) == in; }
+@function is-mm($value) { @return unit-get($value) == mm; }
+@function is-cm($value) { @return unit-get($value) == cm; }
+@function is-q($value)  { @return unit-get($value) ==  q; }
 
-@function is-em($value)   { @return unit($value) ==   em; }
-@function is-rem($value)  { @return unit($value) ==  rem; }
-@function is-vw($value)   { @return unit($value) ==   vw; }
-@function is-vw($value)   { @return unit($value) ==   vh; }
-@function is-vmin($value) { @return unit($value) == vmin; }
-@function is-vmax($value) { @return unit($value) == vmax; }
-@function is-pct($value)  { @return unit($value) ==  '%'; }
-@function is-ex($value)   { @return unit($value) ==   ex; }
-@function is-ch($value)   { @return unit($value) ==   ch; }
+@function is-em($value)   { @return unit-get($value) ==   em; }
+@function is-rem($value)  { @return unit-get($value) ==  rem; }
+@function is-vw($value)   { @return unit-get($value) ==   vw; }
+@function is-vw($value)   { @return unit-get($value) ==   vh; }
+@function is-vmin($value) { @return unit-get($value) == vmin; }
+@function is-vmax($value) { @return unit-get($value) == vmax; }
+@function is-pct($value)  { @return unit-get($value) ==  '%'; }
+@function is-ex($value)   { @return unit-get($value) ==   ex; }
+@function is-ch($value)   { @return unit-get($value) ==   ch; }
 
-@function is-absolute($value) { @return list-index(px pt pc in mm cm q, unit($value)); }
-@function is-relative($value) { @return list-index(em rem vw vh vmin vmax ex ch '%', unit($value)); }
-@function is-angle($value)    { @return list-index(deg rad turn, unit($value)); } 
-@function is-time($value)     { @return list-index(ms s, unit($value)); } 
-@function is-frequency($value){ @return list-index(hz kHz, unit($value)); } 
+@function is-absolute($value)  { @return list-index(px pt pc in mm cm q, unit-get($value)); }
+@function is-relative($value)  { @return list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)); }
+@function is-angle($value)     { @return list-index(deg rad turn, unit-get($value)); } 
+@function is-time($value)      { @return list-index(ms s, unit-get($value)); } 
+@function is-frequency($value) { @return list-index(hz kHz, unit-get($value)); } 
+
 
 
 //  ▪ is-equal
 //  compares two values based on value, type and unit
 //  (libsass will falsely equal 500 and 500px)
-@function is-equal($a, $b){
-  @return 
-      type-of($a) == type-of($b) and 
-      $a and $b and $a+'' == $b+'' or 
-      not $a and not $b;
+@function is-equal($a, $b) {
+    @return 
+        type-of($a) == type-of($b) and 
+        $a and $b and $a+'' == $b+'' or 
+        not $a and not $b;
 }
+
+
 
 //  ▪ is-empty 
 //  empty map, list, arglist or string
 @function is-empty($value)  { 
-  @return 
-    if(index(list map arglist, type-of($value)), length($value) == 0, 
-    if(index(string, type-of($value)), str-length($value) == 0, false));
+    @return 
+        if(list-index(list map arglist, type-of($value)), length($value) == 0, 
+        if(list-index(string, type-of($value)), str-length($value) == 0, false));
 }
 
+
+
 //  ▪ unit-get
-//  similar to unit but returns null in case of not numbers 
-@function unit-get($value){
-  @return if(index(number, type-of($value)), unit($value), null);
+//  Similar to unit but returns null in case of not numbers 
+@function unit-get($value) {
+    @return if(is-number($value), unit($value), null);
 }
+
+
 
 
 
@@ -89,7 +102,8 @@
 //
 //  🔩 List functions
 //
-//  list($args...)                   => list      
+//  list($args...)                   => list   
+//  list-index($list, $n)            => value      
 //
 //  nth-get($list, $n)               => value     
 //  nth-set($list, $n, $value)       => list
@@ -132,20 +146,22 @@
 @function list($args...) { 
     $a1: nth-get($args, 1);
     $a2: nth-get($args, 2);
-	$a3: nth-get($args, 3);
-	$list: if(type-of($a1) == list, $a1, ());
-	$separator: 
-		if(type-of($a2) == list, list-separator($a2), 
-		if(list-index(space comma, $a2), $a2, 
-		if(list-index(space comma, $a3), $a3, 
-		list-separator($list))));
-	$bracketed: 
-		if(type-of($a2) == list, is-bracketed($a2), 
-		if(type-of($a2) == bool, $a2,
-		if(type-of($a3) == bool, $a3, 
-		is-bracketed($list))));
-	@return	join((),$list,$separator,$bracketed);
+    $a3: nth-get($args, 3);
+    $list: if(is-list($a1), $a1, ());
+    $separator: 
+        if(is-list($a2), list-separator($a2), 
+        if(list-index(space comma, $a2), $a2, 
+        if(list-index(space comma, $a3), $a3, 
+        list-separator($list))));
+    $bracketed: 
+        if(is-list($a2), is-bracketed($a2), 
+        if(is-bool($a2), $a2,
+        if(is-bool($a3), $a3, 
+        is-bracketed($list))));
+    @return join((),$list,$separator,$bracketed);
 }
+
+
 
 //  ▪ nth-get
 //  Similar to the native nth function but without 
@@ -169,6 +185,7 @@
 }
 
 
+
 //  ▪ nth-set
 //  Similar to the native set-nth function but without 
 //  index out of bounds error instead returning the  
@@ -185,6 +202,7 @@
 }
 
 
+
 //  ▪ nth-delete
 //  Deletes a value from a list based on index. like nth-get and 
 //  nth-set passing a negative index will delete from the back
@@ -193,11 +211,12 @@
 @function nth-delete($list, $n) {
     $result: ();
     $n: nth-index($list, $n);
-    @for $i from 1 through length($list){
+    @for $i from 1 through length($list) {
         @if $i != $n { $result: append($result, nth($list, $i)); }
     }
     @return list($result, $list);
 }
+
 
 
 //  ▪ nth-index
@@ -210,11 +229,13 @@
 }
 
 
+
 //  ▪ first
 //  Shorthand function to return the first item in a list.
 @function first($list) {
     @return nth-get($list, 1);
 }
+
 
 
 //  ▪ last
@@ -224,15 +245,39 @@
 }
 
 
+
+//  ▪ list-index
+//  Similar to the native index function but with an is-equal check
+//  to ensure unit annd unitless are not treated equal
+@function list-index($list, $value) {
+    @if length($list) == 0 { @return null; }
+    @for $n from 1 through length($list) { 
+        @if is-equal(nth-get($list, $n), $value) { @return $n }; 
+    }
+    @return null;
+}
+
+
+
+//  ▪ first-index
+//  Same as list-index 
+@function first-index($list, $value) {
+    @return list-index($list, $value);
+}
+
+
+
 //  ▪ last-index
 //  Similar to the native index function but returning the 
 //  last found index of a matched value.
 @function last-index($list, $value) {
-    @for $i from length($list) through 1 {
-        @if nth($list, $i) == $value { @return $i; }
+    @if length($list) == 0 { @return null; }
+    @for $n from length($list) through 1  { 
+        @if is-equal(nth($list, $n), $value) { @return $n }; 
     }
     @return null;
 }
+
 
 
 //  ▪ prepend
@@ -240,6 +285,7 @@
 @function prepend($list, $value) {
     @return list(append((), $value), $list);
 }
+
 
 
 //  ▪ reverse
@@ -253,14 +299,14 @@
 }
 
 
+
 //  ▪ unique
 //  Removes duplicate items in a list.
-//
 //  $list: a b a b c d c e;  =>   a b c d e    
 @function unique($list) { 
     $result: ();
     @for $i from 1 through length($list) {
-        $value: nth($list, $i);
+        $value: nth-get($list, $i);
         @if not list-index($result, $value) { 
             $result: append($result, $value); 
         }
@@ -285,16 +331,6 @@
 }
 
 
-//  ▪ list-index
-//  similar to the native index function but with an is-equal check
-//  to ensure unit annd unitless are not treated equal
-@function list-index($list, $value) {
-  @if length($list) == 0 { @return null; }
-  @for $n from 1 through length($list) { 
-    @if is-equal(nth($list, $n), $value) { @return $n }; 
-  }
-  @return null;
-}
 
 
 
@@ -312,7 +348,6 @@
 //
 //  
 //  ·············································································
-
 //  ▪ str-replace
 //  replaces a part of a string with a new replace value. if no replace
 //  value is provided matches will be replaced with '' – hence deleted. 
@@ -321,8 +356,7 @@
     @return if(index,
         str-slice($string, 1, $index - 1) + $replace + 
         str-replace(str-slice($string, $index + str-length($search)), $search, $replace),
-        $string
-    );
+        $string);
 }
 
 
@@ -332,6 +366,18 @@
 //  🔩 Map functions
 //
 //  ·············································································
+//  ▪ map
+//  Returns a map based on passed maps and or keywords
+//  to ensure correct casting we create a dummy map and 
+//  empty it before merging on maps and keywords
+@function map($args...) {
+    $map: map-remove((🔑: 💾), 🔑);
+    @each $arg in $args { @if is-map($arg) { $map: map-merge($map, $arg); } }
+    @return map-merge($map, keywords($args));
+}
+
+
+
 //  ▪ map-some
 //  Returns the map value if the key matches one of the keys in a
 //  map using lists as keys (e.g. wken providing aliases)
@@ -342,10 +388,14 @@
 //  ) 
 //  map-some($map, l) =>  18px
 //
-@function map-some($map, $key){
+@function map-some($map, $key) {
     @each $keys in map-keys($map) { @if list-index($keys, $key) { @return map-get($map, $keys); } } 
     @return null;
 }
+
+
+
+
 
 //  ·············································································
 //
@@ -353,17 +403,309 @@
 //
 //  ·············································································
 
+
+
+
+
 //  ·············································································
 //  
 //  🔩 Math functions
+//  https://github.com/xi/sass-planifolia/blob/master/sass/math.scss
 //
 //  ·············································································
+//  ▪ steps of the taylor expansion
+$☠️--math-steps: 32 !default;
+
+
+
+//  ▪ constants
+$E      : 2.71828182845904523536; //  eulers constant
+$PI     : 3.14159265358979323846; //  pi 
+$TAU    : $PI * 2;                //  tau (2π)
+$PHI    : 1.61803398874989484820; //  phi 
+$SQRT2  : 1.41421356237309504880; //  square root 2
+$LN2    : 0.6931471805599453;     //  natural logarithm of 2 
+$LN10   : 2.302585092994046;      //  natural logarithm of 10
+
+//  aliases
+$LOG2   : $LN2;
+$LOG10  : $LN10;
+$e      : $E;     
+$pi     : $PI;
+$phi    : $PHI;
+$tau    : $TAU;
+$ln2    : $LN2;
+$log2   : $LN2;
+$ln10   : $LN10;
+$log10  : $LN10;
+$π      : $PI;     
+$τ      : $TAU; 
+$Τ      : $TAU; 
+$φ      : $PHI;    
+$Φ      : $PHI;    
+$ϕ      : $PHI;    
+
+
+
+
+//  ▪ log
+//  @param {number} $x
+@function log($x, $steps: $☠️--math-steps) {
+    $approx: ☠️--log10-approx($x);
+    // $y is in range [1, 10]
+    $y: $x / ☠️--pow-int(10, $approx);
+    @return $approx * $log10 + ☠️--log-taylor-1($y, $steps);
+}
+
+
+
+//  ▪ log10
+//  @param {number} $x
+@function log10($x, $steps: $☠️--math-steps) {
+    @return log($x, $steps) / $log10;
+}
+
+
+
+//  ▪ pow
+//  @param {number} $x
+//  @param {number} $exponent
+//    If $x is 0 or below, $exponent needs to be an integer.
+@function pow($x, $exponent, $steps: $☠️--math-steps) {
+    $exp1: round($exponent);
+    $exp2: $exponent - $exp1;
+    $pow1: ☠️--pow-int($x, $exp1);
+    @if $exp2 == 0 { @return $pow1; } 
+    @else if $x == 0 and $exponent > 0 { @return 0; } 
+    @else {
+        $y: log($x, $steps) * $exp2;
+        $pow2: ☠️--exp-taylor-0($y, $steps);
+        @return $pow1 * $pow2;
+    }
+}
+
+
+
+//  ▪ nth-root
+//  @param {number} $x
+//  @param {number} $exponent
+@function nth-root($x, $exponent, $steps: $☠️--math-steps) {
+    @return pow($x, 1 / $exponent, $steps);
+}
+
+
+
+//  ▪ sqrt
+//  @param {number} $x
+@function sqrt($x, $steps: $☠️--math-steps) {
+    @return nth-root($x, 2, $steps);
+}
+
+
+
+//  ▪ sin
+//  @param {number} $x
+@function sin($x, $steps: $☠️--math-steps) {
+    $x: ☠️--angle-to-rad($x);
+    @if $x > $τ { $x: $x % $τ; }
+    @if $x > $π { @return -1 * sin($x - $π); } 
+    @else if $x < 0 { @return -1 * sin(-$x); } 
+    @else { @return ☠️--sin-taylor-0($x, $steps); }
+}
+
+
+
+//  ▪ cos
+@function cos($x, $steps: $☠️--math-steps) {
+    $x: ☠️--angle-to-rad($x);
+    @return sin($x + $π / 2, $steps);
+}
+
+
+
+//  ▪ tan
+@function tan($x, $steps: $☠️--math-steps) {
+    @return sin($x, $steps) / cos($x, $steps);
+}
+
+
+
+//  ▪ asin
+@function asin($x, $steps: $☠️--math-steps) {
+    @if $x < 0 { @return -1 * asin(-$x, $steps); } 
+    @else if $x * $x > .5 { @return acos(sqrt(1 - $x * $x, $steps), $steps); } 
+    @else { @return ☠️--asin-taylor-0($x, $steps); }
+}
+
+
+
+//  ▪ acos
+@function acos($x, $steps: $☠️--math-steps) {
+    @return $π / 2 - asin($x, $steps);
+}
+
+
+
+//  ▪ atan
+@function atan($x, $steps: $☠️--math-steps) {
+    @if $x == 0 { @return 0; } 
+    @else if $x < 0 { @return -1 * atan(-$x, $steps); } 
+    @else { @return asin(1 / sqrt(1 + 1 / ($x * $x), $steps), $steps); }
+}
+
+
+
+//  ▪ atan2
+//  Computes the angle of the vector (x,y) with the x axis.
+//  @param {number} $y
+//  @param {number} $x
+@function atan2($y, $x, $steps: $☠️--math-steps) {
+    @if $x > 0 { @return atan($y / $x, $steps); } 
+    @else if $x < 0 {
+        @if $y >= 0 { @return atan($y / $x, $steps) + $π; } 
+        @else { @return atan($y / $x, $steps) - $π; }
+    } @else {
+        @if $y > 0 { @return $π / 2; } 
+        @else if $y < 0 { @return $π / -2; } 
+        @else { @return 0; }
+    }
+}
+
+
+
+//  ▪ bezier
+//  Generic bezier interpolation.
+//  @param {P[]} $points
+//  @param {number} $t position 0 .. 1
+//  @param {function(P, P, number) => P} $interpolate [$☠️--interpolate]
+//    The default is a linear interpolation between lists of numbers.
+//    You can specify a custom interpolation function, e.g. to interpolate
+//    between colors.
+//  @return {P} A single point.
+@function bezier($points, $t, $interpolate: ☠️--interpolate) {
+    @if length($points) > 1 {
+        $tmp: ();
+        @for $i from 1 to length($points) {
+            $point1: nth($points, $i);
+            $point2: nth($points, $i + 1);
+            $tmp: append($tmp, call($interpolate, $point1, $point2, $t));
+        }
+        @return bezier($tmp, $t, $interpolate);
+    } 
+    @else { @return nth($points, 1); }
+}
+
+
+
+//  ▪ math helper functions
+@function ☠️--angle-to-rad($x) { @return (0rad + $x) / 1rad; }
+
+@function ☠️--exp-taylor-0($x, $steps) {
+    $item: 1;
+    $result: 1;
+    @for $i from 1 to $steps {
+        $item: $item * $x / $i;
+        $result: $result + $item;
+    }
+    @return $result;
+}
+
+@function ☠️--log-taylor-1($x, $steps) {
+    $z: ($x - 1) / ($x + 1);
+    $power: $z;
+    $result: $z;
+    @for $i from 1 to $steps {
+        $power: $power * $z * $z;
+        $result: $result + $power / (2 * $i + 1);
+    }
+    @return 2 * $result;
+}
+
+@function ☠️--sin-taylor-0($x, $steps) {
+    $item: $x;
+    $result: $x;
+    @for $i from 1 to $steps {
+        $item: -$item * $x * $x / (2 * $i) / (2 * $i + 1);
+        $result: $result + $item;
+    }
+    @return $result;
+}
+
+@function ☠️--asin-taylor-0($x, $steps) {
+    $item: $x;
+    $result: $x;
+    @for $i from 1 to $steps {
+        $item: $item * $x * $x * (2 * $i - 1) / (2 * $i);
+        $result: $result + $item / (2 * $i + 1);
+    }
+    @return $result;
+}
+
+@function ☠️--pow-int($base, $exponent) {
+    @if $exponent < 0 { @return 1 / ☠️--pow-int($base, -$exponent); } 
+    @else if $exponent == 0 { @return 1; } 
+    @else if $exponent == 1 { @return $base; } 
+    @else {
+        $exp: floor($exponent / 2);
+        $pow: ☠️--pow-int($base, $exp);
+        @if $exp * 2 == $exponent { @return $pow * $pow; } 
+        @else { @return $pow * $pow * $base; }
+    }
+}
+
+@function ☠️--log10-approx($x) {
+    @if $x <= 0 { @error 'cannot calculate log of #{$x}'; } 
+    // choose the smaller option (-1) because it yields better
+    // results in log().
+    @else if $x >= 1 { @return str-length(inspect(round($x))) - 1; } 
+    @else { @return -1 * str-length(inspect(round(1 / $x))); }
+}
+
+
+@function ☠️--interpolate($a, $b, $t) {
+    $result: ();
+    @for $i from 1 through length($a) {
+        $value: nth($a, $i) * (1 - $t) + nth($b, $i) * $t;
+        $result: append($result, $value);
+    }
+    @return $result;
+}
+
+
 
 //  ·············································································
 //  
 //  🔩 Unit conversion 
 //
 //  ·············································································
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
