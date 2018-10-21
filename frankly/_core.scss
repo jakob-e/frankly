@@ -7,8 +7,9 @@
 //
 //  ·············································································
 
-
-
+//  TODOs
+//  Replace ☠️--angle-to-rad($x) with unit conversion
+//  Test and consider if bezier() should stay 
 
 
 //  ·············································································
@@ -410,6 +411,22 @@
 //  ·············································································
 //  
 //  🔩 Math functions
+//
+//  log($number)                 => number
+//  log10($number)               => number
+//  pow($number, $exponent)      => number
+//  sqrt($number)                => number
+//  nth-root($number, $exponent) => number
+//  sin($number)                 => number
+//  cos($number)                 => number
+//  tan($number)                 => number
+//  asin($number)                => number
+//  acos($number)                => number
+//  atan($number)                => number
+//  atan2($number, $number)      => number
+//
+//  bezier()
+//
 //  https://github.com/xi/sass-planifolia/blob/master/sass/math.scss
 //
 //  ·············································································
