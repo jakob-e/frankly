@@ -18,25 +18,8 @@
 @function is-true($value)   { @return $value == true; }
 @function is-false($value)  { @return $value == false; }
 @function is-null($value)   { @return $value == null; }
-@function is-falsy($value)  { @return $value == false or $value == null or $value == 0; }
 @function is-truthy($value) { @return not is-falsy($value); }   
-
-//  ▪ is-equal
-//  compares two values based on value, type and unit
-//  some sass versions would falsely equal 500 and 500px	
-@function is-equal($a, $b){
-  @return 
-      type-of($a) == type-of($b) and 
-      $a and $b and $a+'' == $b+'' or 
-      not $a and not $b;
-}
-
-//  ▪ empty map, list, arglist or string
-@function is-empty($value)  { 
-  @return 
-    if(index(list map arglist, type-of($value)), length($value) == 0, 
-    if(index(string, type-of($value)), str-length($value) == 0, false));
-}
+@function is-falsy($value)  { @return list-index(false null 0, $value); }
 
 //  ▪ type
 @function is-bool($value)   { @return type-of($value) == bool; }
@@ -67,11 +50,38 @@
 @function is-ex($value)   { @return unit($value) ==   ex; }
 @function is-ch($value)   { @return unit($value) ==   ch; }
 
-@function is-absolute($value) { @return index(px pt pc in mm cm q, unit($value)); }
-@function is-relative($value) { @return index(em rem vw vh vmin vmax ex ch '%', unit($value)); }
-@function is-angle($value)    { @return index(deg rad turn, unit($value)); } 
-@function is-time($value)     { @return index(ms s, unit($value)); } 
-@function is-frequency($value){ @return index(hz kHz, unit($value)); } 
+@function is-absolute($value) { @return list-index(px pt pc in mm cm q, unit($value)); }
+@function is-relative($value) { @return list-index(em rem vw vh vmin vmax ex ch '%', unit($value)); }
+@function is-angle($value)    { @return list-index(deg rad turn, unit($value)); } 
+@function is-time($value)     { @return list-index(ms s, unit($value)); } 
+@function is-frequency($value){ @return list-index(hz kHz, unit($value)); } 
+
+
+//  ▪ is-equal
+//  compares two values based on value, type and unit
+//  (libsass will falsely equal 500 and 500px)
+@function is-equal($a, $b){
+  @return 
+      type-of($a) == type-of($b) and 
+      $a and $b and $a+'' == $b+'' or 
+      not $a and not $b;
+}
+
+//  ▪ is-empty 
+//  empty map, list, arglist or string
+@function is-empty($value)  { 
+  @return 
+    if(index(list map arglist, type-of($value)), length($value) == 0, 
+    if(index(string, type-of($value)), str-length($value) == 0, false));
+}
+
+//  ▪ unit-get
+//  similar to unit but returns null in case of not numbers 
+@function unit-get($value){
+  @return if(index(number, type-of($value)), unit($value), null);
+}
+
+
 
 
 
@@ -121,13 +131,13 @@
 //
 @function list($args...) { 
     $a1: nth-get($args, 1);
-    a2: nth-get($args, 2);
+    $a2: nth-get($args, 2);
 	$a3: nth-get($args, 3);
 	$list: if(type-of($a1) == list, $a1, ());
 	$separator: 
 		if(type-of($a2) == list, list-separator($a2), 
-		if(index(space comma, $a2), $a2, 
-		if(index(space comma, $a3), $a3, 
+		if(list-index(space comma, $a2), $a2, 
+		if(list-index(space comma, $a3), $a3, 
 		list-separator($list))));
 	$bracketed: 
 		if(type-of($a2) == list, is-bracketed($a2), 
@@ -251,12 +261,13 @@
     $result: ();
     @for $i from 1 through length($list) {
         $value: nth($list, $i);
-        @if not index($result, $value) { 
+        @if not list-index($result, $value) { 
             $result: append($result, $value); 
         }
     }
     @return list($result, $list);
 }
+
 
 
 //  ▪ sort
@@ -266,7 +277,7 @@
     $result: ();
     @while length($list) > 0 {
         $min: min($list...);
-        $n: index($list, $min);
+        $n: list-index($list, $min);
         $list: nth-delete($list, $n);
         $result: append($result, $min);
     }
@@ -274,10 +285,10 @@
 }
 
 
-//  ▪ index-equal
-//  like the native index function but with an is-equal check
+//  ▪ list-index
+//  similar to the native index function but with an is-equal check
 //  to ensure unit annd unitless are not treated equal
-@function index-equal($list, $value) {
+@function list-index($list, $value) {
   @if length($list) == 0 { @return null; }
   @for $n from 1 through length($list) { 
     @if is-equal(nth($list, $n), $value) { @return $n }; 
@@ -332,7 +343,7 @@
 //  map-some($map, l) =>  18px
 //
 @function map-some($map, $key){
-    @each $keys in map-keys($map) { @if index($keys, $key) { @return map-get($map, $keys); } } 
+    @each $keys in map-keys($map) { @if list-index($keys, $key) { @return map-get($map, $keys); } } 
     @return null;
 }
 
