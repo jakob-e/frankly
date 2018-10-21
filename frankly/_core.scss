@@ -120,8 +120,8 @@
 //  } 
 //
 @function list($args...) { 
-	$a1: nth-get($args, 1);
-	$a2: nth-get($args, 2);
+    $a1: nth-get($args, 1);
+    a2: nth-get($args, 2);
 	$a3: nth-get($args, 3);
 	$list: if(type-of($a1) == list, $a1, ());
 	$separator: 
@@ -131,7 +131,7 @@
 		list-separator($list))));
 	$bracketed: 
 		if(type-of($a2) == list, is-bracketed($a2), 
-		if(type-of($a2) == bool, $a2, $a2, 
+		if(type-of($a2) == bool, $a2,
 		if(type-of($a3) == bool, $a3, 
 		is-bracketed($list))));
 	@return	join((),$list,$separator,$bracketed);
