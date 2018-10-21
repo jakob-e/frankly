@@ -724,8 +724,6 @@ $ϕ      : $PHI;
 //  
 //  🔩 Unit conversion 
 //
-//  ·············································································
-//
 //   Function               Input units
 //
 //   Absolute length
@@ -782,11 +780,12 @@ $ϕ      : $PHI;
 //   string(input);
 //   number(input);
 //
-// ____________________________________________________________________________
+//  ·············································································
 
-// Base font size in pixel for converting em and rem to absolute lengths.
+// ▪Base font size in pixel for converting em and rem to absolute lengths.
 $root-font-size: 16px !default;
 $base-font-size: $root-font-size !default;
+
 
 
 // ▪ Absolute lengths
@@ -798,24 +797,34 @@ $base-font-size: $root-font-size !default;
 @function cm($input) { @return to-unit(cm, $input); }
 @function q($input)  { @return to-unit(q, $input); }
 
+
+
 // ▪ Angles
 @function deg($input){ @return to-unit(deg, $input); }
 @function rad($input){ @return to-unit(rad, $input); }
 @function grad($input){ @return to-unit(grad, $input); }
 @function turn($input){ @return to-unit(turn, $input); }
 
+
+
 // ▪ Resolution
 @function dpi($input) { @return to-unit(dpi, $input); }
 @function dpcm($input){ @return to-unit(dpcm, $input); }
 @function dppx($input){ @return to-unit(dppx, $input); }
 
+
+
 // ▪ Time
 @function ms($input){ @return to-unit(ms, $input); }
 @function s($input) { @return to-unit(s, $input); }
 
+
+
 // ▪ Frequencies
 @function hz($input){ @return to-unit(hz, $input);}
 @function khz($input){ @return to-unit(khz, $input); }
+
+
 
 // ▪ Relative lengths
 @function em($input...){
@@ -830,15 +839,21 @@ $base-font-size: $root-font-size !default;
 }
 @function rem($input){ @return to-unit(rem, $input); }
 
+
+
 // ▪ Inconvertible relative lengths – depends on font
 @function ex($input){ @return to-unit(ex, $input); }
 @function ch($input){ @return to-unit(ch, $input); }
+
+
 
 // ▪ Viewport
 @function vw($input)  { @return to-unit(vw, $input); }
 @function vh($input)  { @return to-unit(vh, $input); }
 @function vmin($input){ @return to-unit(vmin, $input); }
 @function vmax($input){ @return to-unit(vmax, $input); }
+
+
 
 // ▪ Strings and numbers
 @function str($input){ @return #{$input};  }
@@ -855,12 +870,15 @@ $base-font-size: $root-font-size !default;
 }
 @function uint($input){ @return abs(int($input)); }
 
+
+
 // ▪ Aliases
 @function string($input){ @return str($input);}
 @function number($input){ @return num($input);}
 
 
-// Conversion function
+
+// ▪ Conversion function
 @function to-unit($unit, $input){
   // Test against valid CSS units
   $to-unit: map-get((
@@ -915,6 +933,8 @@ $base-font-size: $root-font-size !default;
   @return $to-unit + $input;
 }
 
+
+//  ▪ ratio
 //  Convert number to ratio (fraction)
 //  ratio(1.7777778) =>   16/9
 @function ratio($x, $y: null){
