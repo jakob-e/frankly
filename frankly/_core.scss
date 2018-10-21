@@ -733,11 +733,11 @@ $ϕ      : $PHI;
 //   in(input);             px, pt, pc, in, mm, cm, em, rem, q, number
 //   mm(input);             px, pt, pc, in, mm, cm, em, rem, q, number
 //   cm(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   q(input);              px, pt, pc, in, mm, cm, em, rem, number
+//   q(input);              px, pt, pc, in, mm, cm, em, rem, q, number
 //
 //   Relative length
-//   em(input);             px, pt, pc, in, mm, cm, em, rem, number
-//   rem(input);            px, pt, pc, in, mm, cm, em, rem, number
+//   em(input);             px, pt, pc, in, mm, cm, q, em, rem, number
+//   rem(input);            px, pt, pc, in, mm, cm, q, em, rem, number
 //   ex(input);             ex, number
 //   ch(input);             ch, number
 //   vw(input);             vw, number
@@ -768,7 +768,7 @@ $ϕ      : $PHI;
 //   str(input);            anything not null
 //
 //   Number, int and uint
-//   num(input);            px, pt, pc, in, mm, cm, em, rem, ex, ch,
+//   num(input);            px, pt, pc, in, mm, cm, q, em, rem, ex, ch,
 //                          vw, vh, vmin, vmax, deg, rad, grad, turn,
 //                          dpi, dpcm, dppx, s, ms, hz, khz, number
 //   int(input);            as number
@@ -862,11 +862,11 @@ $base-font-size: $root-font-size !default;
     @error 'Could not convert `#{$input}` - must be `type-of number`';
     @return null;
   }
-  @return $input/($input*0+1);
+  @return $input / ($input * 0 + 1);
 }
 @function int($input){
   $num: num($input);
-  @return if($num<0, ceil($num), floor($num));
+  @return if($num < 0, ceil($num), floor($num));
 }
 @function uint($input){ @return abs(int($input)); }
 
@@ -878,7 +878,8 @@ $base-font-size: $root-font-size !default;
 
 
 
-// ▪ Conversion function
+// ▪ to-unit
+// Conversion function
 @function to-unit($unit, $input){
   // Test against valid CSS units
   $to-unit: map-get((
@@ -910,7 +911,7 @@ $base-font-size: $root-font-size !default;
   }
   @if index(em, $unit) and not unitless($input) {
     $input: 0px + px($input);
-    $input: num($input) * 1px/$base-font-size;
+    $input: num($input) * 1px / $base-font-size;
   }
 
   // REM convertion using px as base
@@ -919,7 +920,7 @@ $base-font-size: $root-font-size !default;
   }
   @if index(rem, $unit) and not unitless($input) {
     $input: 0px + $input;
-    $input: num($input) * 1px/$root-font-size;
+    $input: num($input) * 1px / $root-font-size;
   }
 
   // Bug fix – resolution units seems to be flipped
