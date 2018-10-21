@@ -412,6 +412,9 @@
 //  
 //  🔩 Math functions
 //
+//  round-to($number, $decimals) => number
+//  ciel-to($number, $decimals)  => number
+//  floor-to($number, $decimals) => number
 //  log($number)                 => number
 //  log10($number)               => number
 //  pow($number, $exponent)      => number
@@ -461,6 +464,33 @@ $Τ      : $TAU;
 $φ      : $PHI;    
 $Φ      : $PHI;    
 $ϕ      : $PHI;    
+
+
+
+//  ▪ round-to
+//  Similar to the native round function but 
+//  allows to set number of decimals
+@function round-to($value, $decimals: null) {
+    @return if($decimals, round($value * pow(10, $decimals))/pow(10, $decimals), round($value));
+}
+
+
+
+//  ▪ ciel-to
+//  Similar to the native ciel function but 
+//  allows to set number of decimals
+@function ciel-to($value, $decimals: null) {
+    @return if($decimals, ciel($value * pow(10, $decimals))/pow(10, $decimals), ciel($value));
+}
+
+
+
+//  ▪ floor-to
+//  Similar to the native floor function but 
+//  allows to set number of decimals
+@function floor-to($value, $decimals: null) {
+    @return if($decimals, floor($value * pow(10, $decimals))/pow(10, $decimals), floor($value));
+}
 
 
 
@@ -695,7 +725,6 @@ $ϕ      : $PHI;
 //  🔩 Unit conversion 
 //
 //  ·············································································
-
 
 
 
