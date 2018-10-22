@@ -211,7 +211,6 @@
 //  Deletes a value from a list based on index. like nth-get and 
 //  nth-set passing a negative index will delete from the back
 //  of the list. 
-// 
 @function nth-delete($list, $n) {
     $result: ();
     $n: nth-index($list, $n);
@@ -469,12 +468,13 @@ $Φ      : $PHI;
 $ϕ      : $PHI;    
 
 
+
 //  ▪ decimals
 //  Returns the number of decimals (provided by Sass)
 //  TODO - include force decimals if possible
 @function decimals($value){
-  $decimal: str-index(#{num($value)},'.');
-	@return if($decimal, str-length(#{num($value)}) - $decimal, 0);
+    $decimal: str-index(#{num($value)},'.');
+    @return if($decimal, str-length(#{num($value)}) - $decimal, 0);
 }
 
 
@@ -839,14 +839,14 @@ $base-font-size: $root-font-size !default;
 
 // ▪ Relative lengths
 @function em($input...){
-  $em: to-unit(em, nth($input,1));
-  // Adjust for compounds (visual size)
-  @if length($input) > 1 {
-    @for $i from 2 through length($input){
-      $em: $em / num(em(nth($input,$i)));
+    $em: to-unit(em, nth($input,1));
+    // Adjust for compounds (visual size)
+    @if length($input) > 1 {
+        @for $i from 2 through length($input){
+            $em: $em / num(em(nth($input,$i)));
+        }
     }
-  }
-  @return $em;
+    @return $em;
 }
 @function rem($input){ @return to-unit(rem, $input); }
 
@@ -869,15 +869,15 @@ $base-font-size: $root-font-size !default;
 // ▪ Strings and numbers
 @function str($input){ @return #{$input};  }
 @function num($input){
-  @if type-of($input) != number {
-    @error 'Could not convert `#{$input}` - must be `type-of number`';
-    @return null;
-  }
-  @return $input / ($input * 0 + 1);
+    @if type-of($input) != number {
+        @error 'Could not convert `#{$input}` - must be `type-of number`';
+        @return null;
+    }
+    @return $input / ($input * 0 + 1);
 }
 @function int($input){
-  $num: num($input);
-  @return if($num < 0, ceil($num), floor($num));
+    $num: num($input);
+    @return if($num < 0, ceil($num), floor($num));
 }
 @function uint($input){ @return abs(int($input)); }
 
@@ -892,64 +892,62 @@ $base-font-size: $root-font-size !default;
 // ▪ to-unit
 // Conversion function
 @function to-unit($unit, $input){
-  // Test against valid CSS units
-  $to-unit: map-get((
-      px: 0px, pt: 0pt, pc: 0pc, in: 0in, mm: 0mm, cm: 0cm, q: 0q, // absolute length
-      em: 0em, rem: 0rem, ch: 0ch, ex: 0ex,                        // relative length - font based
-      vw: 0vw, vh: 0vh, vmin: 0vmin, vmax: 0vmax,                  // relative length - viewport based
-      deg: 0deg, turn: 0turn, grad: 0grad, rad: 0rad,              // angle
-      s: 0s, ms: 0ms,                                              // time
-      hz: 0Hz, khz: 0kHz,                                          // frequency
-      dpi: 0dpi, dpcm: 0dpcm, dppx: 0dppx,                         // resolution
-      pct: 0%, percent: 0%, num: 0, number: 0                      // percent or number
-  ), $unit);
+    // Test against valid CSS units
+    $to-unit: map-get((
+        px: 0px, pt: 0pt, pc: 0pc, in: 0in, mm: 0mm, cm: 0cm, q: 0q, // absolute length
+        em: 0em, rem: 0rem, ch: 0ch, ex: 0ex,                        // relative length - font based
+        vw: 0vw, vh: 0vh, vmin: 0vmin, vmax: 0vmax,                  // relative length - viewport based
+        deg: 0deg, turn: 0turn, grad: 0grad, rad: 0rad,              // angle
+        s: 0s, ms: 0ms,                                              // time
+        hz: 0Hz, khz: 0kHz,                                          // frequency
+        dpi: 0dpi, dpcm: 0dpcm, dppx: 0dppx,                         // resolution
+        pct: 0%, percent: 0%, num: 0, number: 0                      // percent or number
+    ), $unit);
 
-  // Error handling – wrong $unit
-  // Incomparable units are caught in convertion
-  @if not $to-unit {
-    @error 'Could not convert to `#{$unit}` – must be a valid CSS unit';
-    @return null;
-  }
+    // Error handling – wrong $unit
+    // Incomparable units are caught in convertion
+    @if not $to-unit {
+        @error 'Could not convert to `#{$unit}` – must be a valid CSS unit';
+        @return null;
+    }
 
-  // Number/incomparable conversion
-  @if index(num number ex ch vw vh vmin vmax, $unit) {
-    $value: num($input);
-  }
+    // Number/incomparable conversion
+    @if index(num number ex ch vw vh vmin vmax, $unit) {
+        $value: num($input);
+    }
 
-  // EM convertion using px as base
-  @if index(em, unit($input)) {
-    $input: 0px + num($input) * $base-font-size/1px;
-  }
-  @if index(em, $unit) and not unitless($input) {
-    $input: 0px + px($input);
-    $input: num($input) * 1px / $base-font-size;
-  }
+    // EM convertion using px as base
+    @if index(em, unit($input)) {
+        $input: 0px + num($input) * $base-font-size/1px;
+    }
+    @if index(em, $unit) and not unitless($input) {
+        $input: 0px + px($input);
+        $input: num($input) * 1px / $base-font-size;
+    }
 
-  // REM convertion using px as base
-  @if index(rem, unit($input)) {
-    $input: 0px + num($input) * $root-font-size/1px;
-  }
-  @if index(rem, $unit) and not unitless($input) {
-    $input: 0px + $input;
-    $input: num($input) * 1px / $root-font-size;
-  }
+    // REM convertion using px as base
+    @if index(rem, unit($input)) {
+        $input: 0px + num($input) * $root-font-size/1px;
+    }
+    @if index(rem, $unit) and not unitless($input) {
+        $input: 0px + $input;
+        $input: num($input) * 1px / $root-font-size;
+    }
 
-  // Bug fix – resolution units seems to be flipped
-  @if index(dpi dpcm dppx, $unit){
-    $units: (dppx: 0dppx, dpcm: 0dpcm, dpi: 0dpi);
-    $input-unit: map-get($units, unit($input));
-    $input: if(1dppx < 95dpi,num($input-unit + (num($input) + $to-unit)),$input);
-  }
+    // Bug fix – resolution units seems to be flipped
+    @if index(dpi dpcm dppx, $unit){
+        $units: (dppx: 0dppx, dpcm: 0dpcm, dpi: 0dpi);
+        $input-unit: map-get($units, unit($input));
+        $input: if(1dppx < 95dpi,num($input-unit + (num($input) + $to-unit)),$input);
+    }
 
-  
-  //  Bug fix – LibSass does not natively convert q  
-  @if index(q, unit($input)) {
-    $input: num($input) * 1/40 * 1cm;    
-  } 
-  
+    //  Bug fix – LibSass does not natively convert q  
+    @if index(q, unit($input)) {
+        $input: num($input) * 1/40 * 1cm;    
+    } 
 
-  // Convert
-  @return $to-unit + $input;
+    // Convert
+    @return $to-unit + $input;
 }
 
 
@@ -957,21 +955,21 @@ $base-font-size: $root-font-size !default;
 //  Convert number to ratio (fraction)
 //  ratio(1.7777778) =>   16/9
 @function ratio($x, $y: null){
-  @if not $y {
-    $n: $x; $y: 1;
-    @while $y < 10 {
-      $x:  $n * 10 - ((10 - $y) * $n);
-      @if $x == round($x){ @return #{$x}/#{$y}; }
-      @else { $y: $y + 1; }
+    @if not $y {
+        $n: $x; $y: 1;
+        @while $y < 10 {
+            $x:  $n * 10 - ((10 - $y) * $n);
+            @if $x == round($x){ @return #{$x}/#{$y}; }
+            @else { $y: $y + 1; }
+        }
+        $x: round($n * 1000000); $y: 1000000;
+        @while $x % 10 == 0 { $x: $x/10; $y: $y/10; }
+        @while $x % 5 == 0 { $x: $x/5; $y: $y/5; }
+        @while $x % 2 == 0 { $x: $x/2; $y: $y/2; }
+        @return #{$x}/#{$y};
     }
-    $x: round($n * 1000000); $y: 1000000;
-    @while $x % 10 == 0 { $x: $x/10; $y: $y/10; }
-    @while $x % 5 == 0 { $x: $x/5; $y: $y/5; }
-    @while $x % 2 == 0 { $x: $x/2; $y: $y/2; }
-    @return #{$x}/#{$y};
-  }
-  @else if $x == round($x) and $y == round($y){ @return #{$x}/#{$y}; }
-  @warn 'X and Y must be integers'; @return false;
+    @else if $x == round($x) and $y == round($y){ @return #{$x}/#{$y}; }
+    @warn 'X and Y must be integers'; @return false;
 }
 
 
@@ -987,7 +985,31 @@ $base-font-size: $root-font-size !default;
 
 //  ·············································································
 //
-//  Unit testing – not part of core
+//  🐞  Debug 
+//
+//  ·············································································
+//  ▪ debug 
+// 	mixin that only renders content if the 
+//	global $debug variable is set to true
+$debug: false !default;
+@mixin debug { @if $debug { @content; } }  
+
+
+
+
+
+//  ·············································································
+//
+//  🐞  Unit testing 
+//
+//	
+//	test($message)							=>  print message in comment
+//	test($function, $expected, $args...)	=>  runs the function with the args passed
+//												then compares with the expected value
+//	@include test {
+//		@include test('Math Pow');
+//		@include test(pow, 5.656854249492381, 2,  2.5);
+//	}
 //
 //  ·············································································
 @mixin test($function: null, $expected: null, $args...) {
@@ -1000,7 +1022,8 @@ $base-font-size: $root-font-size !default;
 
     @else if not function-exists($function) {
         $report: '' !default;
-        $report: $report+'\a\a#{$function}' !global;
+        $report: $report + '\a #{$function}';
+        $report: $report + '\a····················································' !global;
     }
 
     @else {
@@ -1011,30 +1034,30 @@ $base-font-size: $root-font-size !default;
 
         $result: call(get-function($function), $args...);
         $pass: is-equal($result, $expected);
-        
+
         //	compare on the least precice decimal provided
         @if is-number($result) and is-number($expected){
-          $decimals: min(decimals($result), decimals($expected));
-          $pass: is-equal(
-            round-to($result,   $decimals), 
-            round-to($expected, $decimals)
-          );
+            $decimals: min(decimals($result), decimals($expected));
+            $pass: is-equal(
+                round-to($result,   $decimals), 
+                round-to($expected, $decimals)
+            );
         }
-        
-        
-        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{inspect($result)}';
 
+        //	generate report 
+        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{if(is-string($result), "\""+$result + "\"", $result)}';
 
         //	something went wrong
         @if not $pass {
-            $report: $report+'\a\a    Expected  :  #{type-of($expected)}  `#{inspect($expected)}`';
-            $report: $report+'\a    Result    :  #{type-of($result)}  `#{inspect($result)}`';
+            $report: $report + '\a';
+            $report: $report + '\a    Expected  : #{type-of($expected)}  #{if(is-string($expected), "\""+$expected + "\"", " "+$expected)}';
+            $report: $report + '\a    Result    : #{type-of($result)}  #{if(is-string($result), "\""+$result + "\"", " "+$result)}';
 
             //  type   
             @if not is-equal(type-of($expected), type-of($result)) {
-                $report: $report+'\a    #{$ico-warn} Type';
-                $report: $report+'\a    Expected  : '+#{type-of($expected)};
-                $report: $report+'\a    Result    : '+#{type-of($result)};
+                $report: $report + '\a    #{$ico-warn} Type';
+                $report: $report + '\a    Expected  : #{type-of($expected)}';
+                $report: $report + '\a    Result    : #{type-of($result)}';
             }
 
             @else {
@@ -1044,9 +1067,9 @@ $base-font-size: $root-font-size !default;
 
                     // 	length
                     @if not is-equal(length($expected), length($result)) {
-                        $report: $report+'\a    #{$ico-warn} Length';
-                        $report: $report+'\a    Expected  : #{length($expected)}';
-                        $report: $report+'\a    Result    : #{length($result)}';
+                        $report: $report + '\a    #{$ico-warn} Length';
+                        $report: $report + '\a    Expected  : #{length($expected)}';
+                        $report: $report + '\a    Result    : #{length($result)}';
                     }
 
                     //	separator
@@ -1058,43 +1081,43 @@ $base-font-size: $root-font-size !default;
 
                     //	bracketed
                     @if not is-equal(is-bracketed($expected), is-bracketed($result)) {
-                        $report: $report+'\a    #{$ico-warn} Bracketed';
-                        $report: $report+'\a    Expected  : #{is-bracketed($expected)}';
-                        $report: $report+'\a    Result    : #{is-bracketed($result)}';
+                        $report: $report + '\a    #{$ico-warn} Bracketed';
+                        $report: $report + '\a    Expected  : #{is-bracketed($expected)}';
+                        $report: $report + '\a    Result    : #{is-bracketed($result)}';
                     }
                 }
 
                 //	number
                 @if is-number($result) {
-                    $report: $report+'\a    #{$ico-warn} Value';
-                    $report: $report+'\a    Expected  : #{$expected}';
-                    $report: $report+'\a    Result    : #{$result}';
-                    $report: $report+'\a    Deviation : #{$expected - $result}';
+                    $report: $report + '\a    #{$ico-warn} Value';
+                    $report: $report + '\a    Expected  : #{$expected}';
+                    $report: $report + '\a    Result    : #{$result}';
+                    $report: $report + '\a    Deviation : #{$expected - $result}';
 
                     //	unit
                     @if not is-equal(unit($expected), unit($result)) {
-			$report: $report+'\a    #{$ico-warn} Unit';
-                    	$report: $report+'\a    Expected  : #{unit($expected)}';
-                    	$report: $report+'\a    Result    : #{unit($result)}';
+                        $report: $report + '\a    #{$ico-warn} Unit';
+                        $report: $report + '\a    Expected  : #{unit($expected)}';
+                        $report: $report + '\a    Result    : #{unit($result)}';
                     } 
                 }
-                
+
                 //  string
                 @if is-string($result){
-                  @if not is-equal(str-length($expected), str-length($result)) {
-                    $report: $report+'\a    #{$ico-warn} String Length';
-                    $report: $report+'\a    Expected  : #{str-length($expected)}';
-                    $report: $report+'\a    Result    : #{str-length($result)}';
-                  }
+                    @if not is-equal(str-length($expected), str-length($result)) {
+                        $report: $report + '\a    #{$ico-warn} String Length';
+                        $report: $report + '\a    Expected  : #{str-length($expected)}';
+                        $report: $report + '\a    Result    : #{str-length($result)}';
+                    }
                 }
             }
         }
 
-        $report: $report+'\a···············································';
-        $report: $report+'' !global;
+        $report: $report + '\a····················································' !global;
     }
 
     @if not $test {
-        /*#{$report}*/
+        /*#{'\a'+$report + '\a'}*/
     }
 }
+
