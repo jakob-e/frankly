@@ -1003,9 +1003,9 @@ $debug: false !default;
 //  🐞  Unit testing 
 //
 //	
-//	test($message)							=>  print message in comment
-//	test($function, $expected, $args...)	=>  runs the function with the args passed
-//												then compares with the expected value
+//	test($message)                          =>  print message in comment
+//	test($function, $expected, $args...)    =>  runs the function with the args passed
+//	                                            then compares with the expected value
 //	@include test {
 //		@include test('Math Pow');
 //		@include test(pow, 5.656854249492381, 2,  2.5);
