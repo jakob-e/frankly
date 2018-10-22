@@ -1073,7 +1073,7 @@ $base-font-size: $root-font-size !default;
 
                     //	unit
                     @if not is-equal(unit($expected), unit($result)) {
-						$report: $report+'\a    #{$ico-warn} Unit';
+			$report: $report+'\a    #{$ico-warn} Unit';
                     	$report: $report+'\a    Expected  : #{unit($expected)}';
                     	$report: $report+'\a    Result    : #{unit($result)}';
                     } 
