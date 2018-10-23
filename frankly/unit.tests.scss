@@ -25,8 +25,6 @@
     @include test(is-true, false, list(a b));      
     @include test(is-true, false, map());         
     @include test(is-true, false, map($a:b));   
-	     
-         
     
     @include test('\a  is-false');        
     @include test(is-false, false, true);    
@@ -40,8 +38,6 @@
     @include test(is-false, false, list(a b));      
     @include test(is-false, false, map());          
     @include test(is-false, false, map($a:b));    
-	    
-   
     
     @include test('\a  is-null');        
     @include test(is-null, false, true);    
@@ -56,7 +52,6 @@
     @include test(is-null, false, map());          
     @include test(is-null, false, map($a:b)); 
     
-    
     @include test('\a is-truthy');        
     @include test(is-truthy, true,  true);    
     @include test(is-truthy, false, false);
@@ -69,7 +64,6 @@
     @include test(is-truthy, true,  list(a b));      
     @include test(is-truthy, true,  map());          
     @include test(is-truthy, true,  map($a:b));  
-	
     
     @include test('\a  is-falsy');        
     @include test(is-falsy, false, true);    
