@@ -4,9 +4,7 @@
 //  Functions and mixins to help organize css output 
 //
 //  ·············································································
-//  ▪ private variables
-$☠️--extendables: null;
-$☠️--context-map: null;
+
 
 
 //  ·············································································
@@ -17,11 +15,11 @@ $☠️--context-map: null;
 //  ▪ extendable
 @mixin extendable($key, $extend: true) {
     //  create global list to track extends if not defined
-    //  create a root placeholder if it doesn't exists   
+    //  create a root placeholder if it does not exist 
     //  extend or render content    
-    @if not global-variable-exists('☠️--extendables'){ $☠️--extendables:() !global; } 
-    @if $extend and not index($☠️--extendables, $key) {
-        $☠️--extendables: append($☠️--extendables, $key) !global;
+    @if not global-variable-exists('☠️--extendable-list'){ $☠️--extendable-list:() !global; } 
+    @if $extend and not index($☠️--extendable-list, $key) {
+        $☠️--extendable-list: append($☠️--extendable-list, $key) !global;
         @at-root { %#{$key}{@content;} }
     }
     @if $extend { @extend %#{$key}; }
@@ -32,11 +30,46 @@ $☠️--context-map: null;
 //
 //  🔖  Context 
 //
+//  TODO – handle context values in context function
+//
+//  @mixin media($size) {
+//      @include context(media, $size) { @content; }
+//  }
+//
+//  
+//  @mixin component {
+//      @include media(small) {
+//          size: context-size();  // 14px    
+//      }
+//      @include media(medium) {
+//          size: context-size();  // 16px
+//      }
+//      @include media(large) {
+//          size: context-size();  // 18px
+//      }
+//  }
+//
+//  when called inside a media context the context 
+//  @function context-size {
+//      @return map-get((
+//          small : 14px,
+//          medium: 16px,
+//          large : 16px
+//      ), context(media) or 16px);  
+//  }
+//
 //  ·············································································
-$☠️--context-map: ();	
+
 //  ▪ context mixin
 // 	mixin to create a context visible to passed content 
+//
+//
 @mixin context($key, $value: true) {
+    //  create global map to track context if not defined
+    //  create context with optional init value if it does not exist  
+    //  render content 
+    //  nullify context upon exit 
+    @if not global-variable-exists('☠️--context-map'){ $☠️--context-map:() !global; }     
   	@if not context($key){
       	$☠️--context-map: map-merge($☠️--context-map, ($key: $value)) !global;
       	@content;
