@@ -60,13 +60,14 @@ $debug: false !default;
         }
 
         //	generate report 
-        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{if(is-string($result), "\""+$result + "\"", $result)}';
+
+        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{ inspect(nth-get($args,1)) }) =>  #{if(is-string($result), "\""+inspect($result) + "\"", inspect($result))}';
 
         //	something went wrong
         @if not $pass {
             $report: $report + '\a';
-            $report: $report + '\a    Expected  : #{type-of($expected)}  #{if(is-string($expected), "\""+$expected + "\"", " "+$expected)}';
-            $report: $report + '\a    Result    : #{type-of($result)}  #{if(is-string($result), "\""+$result + "\"", " "+$result)}';
+            $report: $report + '\a    Expected  : #{type-of($expected)}  #{if(is-string($expected), "\""+inspect($expected) + "\"", " "+inspect($expected))}';
+            $report: $report + '\a    Result    : #{type-of($result)}  #{if(is-string($result), "\""+inspect($result) + "\"", " "+inspect($result))}';
 
             //  type   
             @if not is-equal(type-of($expected), type-of($result)) {
