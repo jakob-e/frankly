@@ -22,7 +22,7 @@
 @function is-false($value: null)  { @return $value == false; }
 @function is-null($value: null)   { @return $value == null; }
 @function is-truthy($value: null) { @return not is-falsy($value); }   
-@function is-falsy($value: null)  { @return list-index(false null 0 '', $value); }
+@function is-falsy($value: null)  { @return if(list-index(false null 0 '', $value), true, false); }
 
 
 
@@ -57,11 +57,11 @@
 @function is-ex($value: null)   { @return unit-get($value) ==   ex; }
 @function is-ch($value: null)   { @return unit-get($value) ==   ch; }
 
-@function is-absolute($value: null)  { @return list-index(px pt pc in mm cm q, unit-get($value)); }
-@function is-relative($value: null)  { @return list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)); }
-@function is-angle($value: null)     { @return list-index(deg rad turn, unit-get($value)); } 
-@function is-time($value: null)      { @return list-index(ms s, unit-get($value)); } 
-@function is-frequency($value: null) { @return list-index(hz kHz, unit-get($value)); } 
+@function is-absolute($value: null)  { @return if(list-index(px pt pc in mm cm q, unit-get($value)), true, false); }
+@function is-relative($value: null)  { @return if(list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)), true, false); }
+@function is-angle($value: null)     { @return if(list-index(deg rad turn, unit-get($value)), true, false); } 
+@function is-time($value: null)      { @return if(list-index(ms s, unit-get($value)), true, false); } 
+@function is-frequency($value: null) { @return if(list-index(hz kHz, unit-get($value)), true, false); } 
 
 
 
