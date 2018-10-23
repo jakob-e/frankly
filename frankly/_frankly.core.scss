@@ -22,7 +22,7 @@
 @function is-false($value)  { @return $value == false; }
 @function is-null($value)   { @return $value == null; }
 @function is-truthy($value) { @return not is-falsy($value); }   
-@function is-falsy($value)  { @return list-index(false null 0, $value); }
+@function is-falsy($value)  { @return list-index(false null 0 '', $value); }
 
 
 
