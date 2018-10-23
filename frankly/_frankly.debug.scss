@@ -1,0 +1,137 @@
+//  ·············································································
+//
+//  🐞  Debug 
+//
+//  ·············································································
+//  ▪ debug 
+// 	mixin that only renders content if the 
+//	global $debug variable is set to true
+$debug: false !default;
+@mixin debug { @if $debug { @content; } }  
+
+
+
+
+
+//  ·············································································
+//
+//  🐞  Unit testing 
+//
+//	
+//	test($message)                          =>  print message in comment
+//	test($function, $expected, $args...)    =>  runs the function with the args passed
+//	                                            then compares with the expected value
+//	@include test {
+//		@include test('Math Pow');
+//		@include test(pow, 5.656854249492381, 2,  2.5);
+//	}
+//
+//  ·············································································
+@mixin test($function: null, $expected: null, $args...) {
+    @if $function==null {
+        $test: true !global;
+        $report: '' !global;
+        @content;
+        $test: false !global;
+    }
+
+    @else if not function-exists($function) {
+        $report: '' !default;
+        $report: $report + '\a #{$function}';
+        $report: $report + '\a····················································' !global;
+    }
+
+    @else {
+        $report: '' !default;
+        $ico-pass: '✅';
+        $ico-fail: '❌';
+        $ico-warn: '⚠️';
+
+        $result: call(get-function($function), $args...);
+        $pass: is-equal($result, $expected);
+
+        //	compare on the least precice decimal provided
+        @if is-number($result) and is-number($expected){
+            $decimals: min(decimals($result), decimals($expected));
+            $pass: is-equal(
+                round-to($result,   $decimals), 
+                round-to($expected, $decimals)
+            );
+        }
+
+        //	generate report 
+        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{if(is-string($result), "\""+$result + "\"", $result)}';
+
+        //	something went wrong
+        @if not $pass {
+            $report: $report + '\a';
+            $report: $report + '\a    Expected  : #{type-of($expected)}  #{if(is-string($expected), "\""+$expected + "\"", " "+$expected)}';
+            $report: $report + '\a    Result    : #{type-of($result)}  #{if(is-string($result), "\""+$result + "\"", " "+$result)}';
+
+            //  type   
+            @if not is-equal(type-of($expected), type-of($result)) {
+                $report: $report + '\a    #{$ico-warn} Type';
+                $report: $report + '\a    Expected  : #{type-of($expected)}';
+                $report: $report + '\a    Result    : #{type-of($result)}';
+            }
+
+            @else {
+
+                //	list 
+                @if is-list($result) {
+
+                    // 	length
+                    @if not is-equal(length($expected), length($result)) {
+                        $report: $report + '\a    #{$ico-warn} Length';
+                        $report: $report + '\a    Expected  : #{length($expected)}';
+                        $report: $report + '\a    Result    : #{length($result)}';
+                    }
+
+                    //	separator
+                    @if not is-equal(list-separator($expected), list-separator($result)) {
+                        $report: $report+'\a    #{$ico-warn} Separator';
+                        $report: $report+'\a    Expected  : #{list-separator($expected)}';
+                        $report: $report+'\a    Result    : #{list-separator($result)}';
+                    }
+
+                    //	bracketed
+                    @if not is-equal(is-bracketed($expected), is-bracketed($result)) {
+                        $report: $report + '\a    #{$ico-warn} Bracketed';
+                        $report: $report + '\a    Expected  : #{is-bracketed($expected)}';
+                        $report: $report + '\a    Result    : #{is-bracketed($result)}';
+                    }
+                }
+
+                //	number
+                @if is-number($result) {
+                    $report: $report + '\a    #{$ico-warn} Value';
+                    $report: $report + '\a    Expected  : #{$expected}';
+                    $report: $report + '\a    Result    : #{$result}';
+                    $report: $report + '\a    Deviation : #{$expected - $result}';
+
+                    //	unit
+                    @if not is-equal(unit($expected), unit($result)) {
+                        $report: $report + '\a    #{$ico-warn} Unit';
+                        $report: $report + '\a    Expected  : #{unit($expected)}';
+                        $report: $report + '\a    Result    : #{unit($result)}';
+                    } 
+                }
+
+                //  string
+                @if is-string($result){
+                    @if not is-equal(str-length($expected), str-length($result)) {
+                        $report: $report + '\a    #{$ico-warn} String Length';
+                        $report: $report + '\a    Expected  : #{str-length($expected)}';
+                        $report: $report + '\a    Result    : #{str-length($result)}';
+                    }
+                }
+            }
+        }
+
+        $report: $report + '\a····················································' !global;
+    }
+
+    @if not $test {
+        /*#{'\a'+$report + '\a'}*/
+    }
+}
