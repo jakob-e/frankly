@@ -1,0 +1,52 @@
+//  ·············································································
+//
+//  🔖  Organize
+//  Functions and mixins to help organize css output 
+//
+//  ·············································································
+//  ▪ private variables
+$☠️--extendables: null;
+$☠️--context-map: null;
+
+
+//  ·············································································
+//    
+//  🔖  Extends
+//
+//  ·············································································
+//  ▪ extendable
+@mixin extendable($key, $extend: true) {
+    //  create global list to track extends if not defined
+    //  create a root placeholder if it doesn't exists   
+    //  extend or render content    
+    @if not global-variable-exists('☠️--extendables'){ $☠️--extendables:() !global; } 
+    @if $extend and not index($☠️--extendables, $key) {
+        $☠️--extendables: append($☠️--extendables, $key) !global;
+        @at-root { %#{$key}{@content;} }
+    }
+    @if $extend { @extend %#{$key}; }
+    @else { @content; }
+}
+
+//  ·············································································
+//
+//	🔖  Context 
+//
+//  ·············································································
+$☠️--context-map: ();	
+//  ▪ context mixin
+// 	mixin to create a context visible to passed content 
+@mixin context($key, $value: true) {
+  	@if not context($key){
+      	$☠️--context-map: map-merge($☠️--context-map, ($key: $value)) !global;
+      	@content;
+      	$☠️--context-map: map-remove($☠️--context-map, $key) !global;
+  	}
+}
+
+//  ▪ context function
+// 	function to get the current context 
+@function context($key: null){ 
+  	@return if($key, map-get($☠️--context-map, $key), $☠️--context-map); 
+}
+
