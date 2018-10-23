@@ -7,67 +7,84 @@
 
 
 
+//  ·············································································
+//  Introspection
+//  ·············································································
 //  ▪ boolean
 @include test {
-    @include test(Introspection);
-    @include test(is-true);    
+    @include test('Introspection - boolean');
+    @include test('\a  is-true');    
     @include test(is-true, true,  true);    
     @include test(is-true, false, false);
     @include test(is-true, false, null);
     @include test(is-true, false, 0);
     @include test(is-true, false, string);  
     @include test(is-true, false, '');    
-    @include test(is-true, false, (a,b));      
-    @include test(is-true, false, list());          
-    @include test(is-true, false, (a:b));          
+	@include test(is-true, false, list());              
+    @include test(is-true, false, list(a)); 
+    @include test(is-true, false, list(a b));      
+    @include test(is-true, false, map());         
+    @include test(is-true, false, map($a:b));   
+	     
          
     
-    @include test(is-false);        
-    @include test(is-false, false,  true);    
-    @include test(is-false, true, false);
+    @include test('\a  is-false');        
+    @include test(is-false, false, true);    
+    @include test(is-false, true,  false);
     @include test(is-false, false, null);
     @include test(is-false, false, 0);
     @include test(is-false, false, string);  
     @include test(is-false, false, '');    
-    @include test(is-false, false, (a,b));      
-    @include test(is-false, false, list());          
-    @include test(is-false, false, (a:b));          
+	@include test(is-false, false, list());        
+    @include test(is-false, false, list(a));  
+    @include test(is-false, false, list(a b));      
+	@include test(is-false, false, map());          
+    @include test(is-false, false, map($a:b));    
+	    
    
     
-    @include test(is-null);        
-    @include test(is-null, flase,  true);    
+    @include test('\a  is-null');        
+    @include test(is-null, false, true);    
     @include test(is-null, false, false);
-    @include test(is-null, true, null);
+    @include test(is-null, true,  null);
     @include test(is-null, false, 0);
     @include test(is-null, false, string);  
     @include test(is-null, false, '');    
-    @include test(is-null, false, (a,b));      
-    @include test(is-null, false, list());          
-    @include test(is-null, false, (a:b));          
+    @include test(is-null, false, list());         
+    @include test(is-null, false, list(a));
+    @include test(is-null, false, list(a b));      
+    @include test(is-null, false, map());          
+    @include test(is-null, false, map($a:b)); 
     
-    @include test(is-truthy);        
+    
+    @include test('\a is-truthy');        
     @include test(is-truthy, true,  true);    
     @include test(is-truthy, false, false);
     @include test(is-truthy, false, null);
     @include test(is-truthy, false, 0);
-    @include test(is-truthy, false, string);
+    @include test(is-truthy, true,  string);
     @include test(is-truthy, false, '');    
-    @include test(is-truthy, false, (a,b));      
-    @include test(is-truthy, false, list());          
-    @include test(is-truthy, false, (a:b));          
+	@include test(is-truthy, true,  list());
+    @include test(is-truthy, true,  list(a));  
+    @include test(is-truthy, true,  list(a b));      
+    @include test(is-truthy, true,  map());          
+    @include test(is-truthy, true,  map($a:b));  
+	
     
-    @include test(is-falsy);        
-    @include test(is-falsy, false,  true);    
-    @include test(is-falsy, true, false);
-    @include test(is-falsy, true, null);
-    @include test(is-falsy, true, 0);
+    @include test('\a  is-falsy');        
+    @include test(is-falsy, false, true);    
+    @include test(is-falsy, true,  false);
+    @include test(is-falsy, true,  null);
+    @include test(is-falsy, true,  0);
     @include test(is-falsy, false, string);
-    @include test(is-falsy, true, '');    
-    @include test(is-falsy, false, (a,b));      
-    @include test(is-falsy, false, list());          
-    @include test(is-falsy, false, (a:b));      
-    
+    @include test(is-falsy, true,  '');    
+	@include test(is-falsy, false, list());             
+	@include test(is-falsy, false, list(a));       
+    @include test(is-falsy, false, list(a b));      
+    @include test(is-falsy, false, map());
+    @include test(is-falsy, false, map($a:b));      
 }
+
 
 
 /*
