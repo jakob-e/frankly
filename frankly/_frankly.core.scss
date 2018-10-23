@@ -18,50 +18,50 @@
 //
 //  ·············································································
 //  ▪ boolean
-@function is-true($value)   { @return $value == true; }
-@function is-false($value)  { @return $value == false; }
-@function is-null($value)   { @return $value == null; }
-@function is-truthy($value) { @return not is-falsy($value); }   
-@function is-falsy($value)  { @return list-index(false null 0 '', $value); }
+@function is-true($value: null)   { @return $value == true; }
+@function is-false($value: null)  { @return $value == false; }
+@function is-null($value: null)   { @return $value == null; }
+@function is-truthy($value: null) { @return not is-falsy($value); }   
+@function is-falsy($value: null)  { @return list-index(false null 0 '', $value); }
 
 
 
 //  ▪ type
-@function is-bool($value)    { @return type-of($value) == bool; }
-@function is-number($value)  { @return type-of($value) == number; }
-@function is-string($value)  { @return type-of($value) == string; }
-@function is-list($value)    { @return type-of($value) == list; }
-@function is-map($value)     { @return type-of($value) == map; }
-@function is-color($value)   { @return type-of($value) == color; } 
-@function is-arglist($value) { @return type-of($value) == arglist; }
-@function is-nan($value)     { @return not is-number($value); }
+@function is-bool($value: null)    { @return type-of($value) == bool; }
+@function is-number($value: null)  { @return type-of($value) == number; }
+@function is-string($value: null)  { @return type-of($value) == string; }
+@function is-list($value: null)    { @return type-of($value) == list; }
+@function is-map($value: null)     { @return type-of($value) == map; }
+@function is-color($value: null)   { @return type-of($value) == color; } 
+@function is-arglist($value: null) { @return type-of($value) == arglist; }
+@function is-nan($value: null)     { @return not is-number($value); }
 
 
 
 //  ▪ unit
-@function is-px($value) { @return unit-get($value) == px; }
-@function is-pt($value) { @return unit-get($value) == pt; }
-@function is-pc($value) { @return unit-get($value) == pc; }
-@function is-in($value) { @return unit-get($value) == in; }
-@function is-mm($value) { @return unit-get($value) == mm; }
-@function is-cm($value) { @return unit-get($value) == cm; }
-@function is-q($value)  { @return unit-get($value) ==  q; }
+@function is-px($value: null) { @return unit-get($value) == px; }
+@function is-pt($value: null) { @return unit-get($value) == pt; }
+@function is-pc($value: null) { @return unit-get($value) == pc; }
+@function is-in($value: null) { @return unit-get($value) == in; }
+@function is-mm($value: null) { @return unit-get($value) == mm; }
+@function is-cm($value: null) { @return unit-get($value) == cm; }
+@function is-q($value: null)  { @return unit-get($value) ==  q; }
 
-@function is-em($value)   { @return unit-get($value) ==   em; }
-@function is-rem($value)  { @return unit-get($value) ==  rem; }
-@function is-vw($value)   { @return unit-get($value) ==   vw; }
-@function is-vw($value)   { @return unit-get($value) ==   vh; }
-@function is-vmin($value) { @return unit-get($value) == vmin; }
-@function is-vmax($value) { @return unit-get($value) == vmax; }
-@function is-pct($value)  { @return unit-get($value) ==  '%'; }
-@function is-ex($value)   { @return unit-get($value) ==   ex; }
-@function is-ch($value)   { @return unit-get($value) ==   ch; }
+@function is-em($value: null)   { @return unit-get($value) ==   em; }
+@function is-rem($value: null)  { @return unit-get($value) ==  rem; }
+@function is-vw($value: null)   { @return unit-get($value) ==   vw; }
+@function is-vw($value: null)   { @return unit-get($value) ==   vh; }
+@function is-vmin($value: null) { @return unit-get($value) == vmin; }
+@function is-vmax($value: null) { @return unit-get($value) == vmax; }
+@function is-pct($value: null)  { @return unit-get($value) ==  '%'; }
+@function is-ex($value: null)   { @return unit-get($value) ==   ex; }
+@function is-ch($value: null)   { @return unit-get($value) ==   ch; }
 
-@function is-absolute($value)  { @return list-index(px pt pc in mm cm q, unit-get($value)); }
-@function is-relative($value)  { @return list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)); }
-@function is-angle($value)     { @return list-index(deg rad turn, unit-get($value)); } 
-@function is-time($value)      { @return list-index(ms s, unit-get($value)); } 
-@function is-frequency($value) { @return list-index(hz kHz, unit-get($value)); } 
+@function is-absolute($value: null)  { @return list-index(px pt pc in mm cm q, unit-get($value)); }
+@function is-relative($value: null)  { @return list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)); }
+@function is-angle($value: null)     { @return list-index(deg rad turn, unit-get($value)); } 
+@function is-time($value: null)      { @return list-index(ms s, unit-get($value)); } 
+@function is-frequency($value: null) { @return list-index(hz kHz, unit-get($value)); } 
 
 
 
