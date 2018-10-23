@@ -25,7 +25,7 @@
     @include test(is-true, false, list(a b));      
     @include test(is-true, false, map());         
     @include test(is-true, false, map($a:b));   
-	@include test(is-true, false, #000);            
+    @include test(is-true, false, #000);            
     @include test(is-true, false, #fff);
 
     @include test('\a  is-false');        
@@ -35,10 +35,10 @@
     @include test(is-false, false, 0);
     @include test(is-false, false, string);  
     @include test(is-false, false, '');    
-	@include test(is-false, false, list());        
+    @include test(is-false, false, list());        
     @include test(is-false, false, list(a));  
     @include test(is-false, false, list(a b));      
-	@include test(is-false, false, map());          
+    @include test(is-false, false, map());          
     @include test(is-false, false, map($a:b)); 
     @include test(is-false, false, #000);           
     @include test(is-false, false, #fff);        
@@ -55,8 +55,8 @@
     @include test(is-null, false, list(a b));      
     @include test(is-null, false, map());          
     @include test(is-null, false, map($a:b)); 
-	@include test(is-null, false, #000);     
-	@include test(is-null, false, #fff);     
+    @include test(is-null, false, #000);     
+    @include test(is-null, false, #fff);     
 
     @include test('\a is-truthy');        
     @include test(is-truthy, true,  true);    
@@ -65,13 +65,13 @@
     @include test(is-truthy, false, 0);
     @include test(is-truthy, true,  string);
     @include test(is-truthy, false, '');    
-	@include test(is-truthy, true,  list());
+    @include test(is-truthy, true,  list());
     @include test(is-truthy, true,  list(a));  
     @include test(is-truthy, true,  list(a b));      
     @include test(is-truthy, true,  map());          
     @include test(is-truthy, true,  map($a:b));  
-	@include test(is-truthy, true,  #000);    
-	@include test(is-truthy, true,  #fff);    	
+    @include test(is-truthy, true,  #000);    
+    @include test(is-truthy, true,  #fff);    	
 
     @include test('\a  is-falsy');        
     @include test(is-falsy, false, true);    
@@ -80,13 +80,13 @@
     @include test(is-falsy, true,  0);
     @include test(is-falsy, false, string);
     @include test(is-falsy, true,  '');    
-	@include test(is-falsy, false, list());             
-	@include test(is-falsy, false, list(a));       
+    @include test(is-falsy, false, list());             
+    @include test(is-falsy, false, list(a));       
     @include test(is-falsy, false, list(a b));      
     @include test(is-falsy, false, map());
     @include test(is-falsy, false, map($a:b));  
-	@include test(is-falsy, false, #000);    
-	@include test(is-falsy, false, #fff);    	
+    @include test(is-falsy, false, #000);    
+    @include test(is-falsy, false, #fff);    	
 	
 	              
     
