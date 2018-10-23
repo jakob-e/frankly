@@ -20,7 +20,7 @@
     @include test(is-true, false, 0);
     @include test(is-true, false, string);  
     @include test(is-true, false, '');    
-	@include test(is-true, false, list());              
+    @include test(is-true, false, list());              
     @include test(is-true, false, list(a)); 
     @include test(is-true, false, list(a b));      
     @include test(is-true, false, map());         
@@ -35,10 +35,10 @@
     @include test(is-false, false, 0);
     @include test(is-false, false, string);  
     @include test(is-false, false, '');    
-	@include test(is-false, false, list());        
+    @include test(is-false, false, list());        
     @include test(is-false, false, list(a));  
     @include test(is-false, false, list(a b));      
-	@include test(is-false, false, map());          
+    @include test(is-false, false, map());          
     @include test(is-false, false, map($a:b));    
 	    
    
@@ -64,7 +64,7 @@
     @include test(is-truthy, false, 0);
     @include test(is-truthy, true,  string);
     @include test(is-truthy, false, '');    
-	@include test(is-truthy, true,  list());
+    @include test(is-truthy, true,  list());
     @include test(is-truthy, true,  list(a));  
     @include test(is-truthy, true,  list(a b));      
     @include test(is-truthy, true,  map());          
@@ -78,8 +78,8 @@
     @include test(is-falsy, true,  0);
     @include test(is-falsy, false, string);
     @include test(is-falsy, true,  '');    
-	@include test(is-falsy, false, list());             
-	@include test(is-falsy, false, list(a));       
+    @include test(is-falsy, false, list());             
+    @include test(is-falsy, false, list(a));       
     @include test(is-falsy, false, list(a b));      
     @include test(is-falsy, false, map());
     @include test(is-falsy, false, map($a:b));      
