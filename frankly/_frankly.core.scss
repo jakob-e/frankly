@@ -398,6 +398,25 @@
 
 
 
+//  ▪ map-value-sort
+//  Returns a map sorted 
+@function map-value-sort($map, $ascending: true){
+  $sort-list: sort(map-values($map), $ascending);
+  $result: ();
+  @for $i from 1 through length($sort-list) {
+    @each $key, $value in $map {
+      @if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
+    }
+  }   
+  @return $result;
+}
+
+//  ▪ map-key-sort
+//  TODO - requires alphabetical sort 
+@function map-key-sort($map, $ascending: true){
+}
+
+
 
 
 //  ·············································································
