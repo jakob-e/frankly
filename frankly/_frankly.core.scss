@@ -323,20 +323,45 @@
 
 
 
-//  ▪ sort
+//  ▪ old – sort
 //  sorts a list containing numbers (including comparable units)
 //  by default the sort order is ascending
-@function sort($list, $ascending: true) { 
-    $result: ();
-    @while length($list) > 0 {
-        $min: min($list...);
-        $n: list-index($list, $min);
-        $list: nth-delete($list, $n);
-        $result: append($result, $min);
-    }
-    @return list(if($ascending, $result, reverse($result)), $list);
-}
+//@function sort($list, $ascending: true) { 
+//    $result: ();
+//    @while length($list) > 0 {
+//        $min: min($list...);
+//        $n: list-index($list, $min);
+//        $list: nth-delete($list, $n);
+//        $result: append($result, $min);
+//    }
+//    @return list(if($ascending, $result, reverse($result)), $list);
+//}
 
+//  ▪ sort
+//  Returns a sorted list based on a sort order list  
+//  by default the returned order is ascending
+$default-sort-order:
+  "!" "#" "$" "%" "&" "'" "(" ")" "*" "+" "," "-" "." "/" "[" "\\" "]" "^" "_" "{" "|" "}" "~" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"
+  "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "æ" "ø" "å"
+!default;
+
+
+@function sort($list, $ascending: true, $order: $default-sort-order) {
+    $lo: ();	// list to keep values lower than pivot
+    $eq: ();	// list to keep values equal pivot
+    $hi: ();	// list to keep values higher than pivot
+    @if length($list) > 1 {
+        $pivot: nth-get($list, ceil(length($list) / 2));
+        @each $item in $list {
+			@if is-equal($item, $pivot) { $eq: append($eq, $item); }
+			@else if str-compare($item, $pivot, $order){ $lo: append($lo, $item); }
+			@else { $hi: append($hi, $item); }
+		} 
+		$result: join(join(sort($lo, $ascending, $order), $eq), sort($hi, $ascending, $order));
+		@return list(if(not $ascending, reverse($result), $result), $list);
+	}
+	@return $list;
+}
 
 
 
@@ -355,6 +380,10 @@
 //
 //  
 //  ·············································································
+//  ▪ str
+//  Found under unit conversion 
+
+
 //  ▪ str-replace
 //  replaces a part of a string with a new replace value. if no replace
 //  value is provided matches will be replaced with '' – hence deleted. 
@@ -364,6 +393,23 @@
         str-slice($string, 1, $index - 1) + $replace + 
         str-replace(str-slice($string, $index + str-length($search)), $search, $replace),
         $string);
+}
+
+
+
+//  ▪ str-compare
+//  Returns true/false if string `a` is considered to come before 
+//  string `b` based on character sort order
+@function str-compare($a, $b, $order: $default-sort-order){
+	@if is-number($a) and is-number($b) { @return $a < $b; }
+	$a: to-lower-case(str($a));
+	$b: to-lower-case(str($b));
+	@for $i from 1 through min(str-length($a), str-length($b)){
+		$index-a: index($order, str-slice($a, $i, $i));
+        $index-b: index($order, str-slice($b, $i, $i));
+        @if $index-a != $index-b { @return $index-a < $index-b; }
+	}
+	@return str-length($a) < str-length($b);
 }
 
 
@@ -890,7 +936,7 @@ $base-font-size: $root-font-size !default;
 
 
 // ▪ Strings and numbers
-@function str($input){ @return #{$input};  }
+@function str($input){ @return $input + unquote('');  }
 @function num($input){
     @if type-of($input) != number {
         @error 'Could not convert `#{$input}` - must be `type-of number`';
