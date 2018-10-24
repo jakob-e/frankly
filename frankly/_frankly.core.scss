@@ -72,7 +72,7 @@ $default-sort-order-list:
 @function is-absolute($value: null)  { @return if(list-index(px pt pc in mm cm q, unit-get($value)), true, false); }
 @function is-relative($value: null)  { @return if(list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)), true, false); }
 @function is-angle($value: null)     { @return if(list-index(deg rad turn, unit-get($value)), true, false); } 
-@function is-time($value: null)   { @return if(list-index(ms s, unit-get($value)), true, false); } 
+@function is-time($value: null)      { @return if(list-index(ms s, unit-get($value)), true, false); } 
 @function is-frequency($value: null) { @return if(list-index(hz kHz, unit-get($value)), true, false); } 
 
 
@@ -375,23 +375,22 @@ $default-sort-order-list:
 //  Returns a sorted list based on a sort order list  
 //  by default the returned order is ascending
 @function sort($list, $ascending: true, $order: $default-sort-order-list) {
-  $result: quick-️sort($list, $order);
-  @return if($ascending, $result, reverse($result));
+	$result: quick-️sort($list, $order);
+	@return if($ascending, $result, reverse($result));
 }
 
 @function quick-sort($list, $order: $default-sort-order-list) {
-    $lo: ();	// list to keep values lower than pivot
-    $eq: ();	// list to keep values equal pivot
-    $hi: ();	// list to keep values higher than pivot
-    @if length($list) > 1 {
-      $pivot: nth-get($list, ceil(length($list) / 2));
-        
-      @each $item in $list {
-	     @if is-equal($item, $pivot) { $eq: append($eq, $item); }
-	     @else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
-	     @else { $hi: append($hi, $item); }
-	   } 
-	   @return join(join(quick-️sort($lo, $order), $eq), quick-️sort($hi, $order));
+	$lo: ();	// list to keep values lower than pivot
+	$eq: ();	// list to keep values equal pivot
+	$hi: ();	// list to keep values higher than pivot
+	@if length($list) > 1 {
+		$pivot: nth-get($list, ceil(length($list) / 2));
+		@each $item in $list {
+			@if is-equal($item, $pivot) { $eq: append($eq, $item); }
+			@else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
+			@else { $hi: append($hi, $item); }
+		} 
+		@return join(join(quick-sort($lo, $order), $eq), quick-sort($hi, $order));
   }
   @return $list;
 }
