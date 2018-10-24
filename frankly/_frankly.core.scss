@@ -468,7 +468,7 @@ $default-sort-order-list:
 
 
 //  ▪ map-value-sort
-//  Returns a map sorted 
+//  Returns a map sorted by map value
 @function map-value-sort($map, $ascending: true){
   $sort-list: sort(map-values($map), $ascending);
   $result: ();
@@ -480,9 +480,19 @@ $default-sort-order-list:
   @return $result;
 }
 
+
+
 //  ▪ map-key-sort
-//  TODO - requires alphabetical sort 
+//  Returns a map sorted by map key names
 @function map-key-sort($map, $ascending: true){
+  $sort-list: sort(map-keys($map), $ascending);
+  $result: ();
+  @for $i from 1 through length($sort-list) {
+    @each $key, $value in $map {
+      @if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
+    }
+  }   
+  @return $result;
 }
 
 
@@ -1063,117 +1073,3 @@ $base-font-size: $root-font-size !default;
 
 
 
-
-//  ·············································································
-//
-//  Unit testing – not part of core
-//
-//  ·············································································
-@mixin test($function: null, $expected: null, $args...) {
-    @if $function==null {
-        $test: true !global;
-        $report: '' !global;
-        @content;
-        $test: false !global;
-    }
-
-    @else if not function-exists($function) {
-        $report: '' !default;
-        $report: $report+'\a\a#{$function}' !global;
-    }
-
-    @else {
-        $report: '' !default;
-        $ico-pass: '✅';
-        $ico-fail: '❌';
-        $ico-warn: '⚠️';
-
-        $result: call(get-function($function), $args...);
-        $pass: is-equal($result, $expected);
-        
-        //	compare on the least precice decimal provided
-        @if is-number($result) and is-number($expected){
-          $decimals: min(decimals($result), decimals($expected));
-          $pass: is-equal(
-            round-to($result,   $decimals), 
-            round-to($expected, $decimals)
-          );
-        }
-        
-        
-        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{inspect($result)}';
-
-
-        //	something went wrong
-        @if not $pass {
-            $report: $report+'\a\a  Expected  :  #{type-of($expected)}  `#{inspect($expected)}`';
-            $report: $report+'\a    Result  :  #{type-of($result)}  `#{inspect($result)}`';
-
-            //  type   
-            @if not is-equal(type-of($expected), type-of($result)) {
-                $report: $report+'\a    #{$ico-warn} Type';
-                $report: $report+'\a    Expected  : '+#{type-of($expected)};
-                $report: $report+'\a    Result  : '+#{type-of($result)};
-            }
-
-            @else {
-
-                //	list 
-                @if is-list($result) {
-
-                    // 	length
-                    @if not is-equal(length($expected), length($result)) {
-                        $report: $report+'\a    #{$ico-warn} Length';
-                        $report: $report+'\a    Expected  : #{length($expected)}';
-                        $report: $report+'\a    Result  : #{length($result)}';
-                    }
-
-                    //	separator
-                    @if not is-equal(list-separator($expected), list-separator($result)) {
-                        $report: $report+'\a    #{$ico-warn} Separator';
-                        $report: $report+'\a    Expected  : #{list-separator($expected)}';
-                        $report: $report+'\a    Result  : #{list-separator($result)}';
-                    }
-
-                    //	bracketed
-                    @if not is-equal(is-bracketed($expected), is-bracketed($result)) {
-                        $report: $report+'\a    #{$ico-warn} Bracketed';
-                        $report: $report+'\a    Expected  : #{is-bracketed($expected)}';
-                        $report: $report+'\a    Result  : #{is-bracketed($result)}';
-                    }
-                }
-
-                //	number
-                @if is-number($result) {
-                    $report: $report+'\a    #{$ico-warn} Value';
-                    $report: $report+'\a    Expected  : #{$expected}';
-                    $report: $report+'\a    Result  : #{$result}';
-                    $report: $report+'\a    Deviation : #{$expected - $result}';
-
-                    //	unit
-                    @if not is-equal(unit($expected), unit($result)) {
-						$report: $report+'\a  #{$ico-warn} Unit';
-                    	$report: $report+'\a   Expected  : #{unit($expected)}';
-                    	$report: $report+'\a   Result : #{unit($result)}';
-                    } 
-                }
-                
-                //  string
-                @if is-string($result){
-                  @if not is-equal(str-length($expected), str-length($result)) {
-                    $report: $report+'\a    #{$ico-warn} String Length';
-                    $report: $report+'\a    Expected  : #{str-length($expected)}';
-                    $report: $report+'\a    Result  : #{str-length($result)}';
-                  }
-                }
-            }
-        }
-
-        $report: $report+'\a···············································';
-        $report: $report+'' !global;
-    }
-
-    @if not $test {
-        /*#{$report}*/
-    }
-}
