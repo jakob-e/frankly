@@ -384,17 +384,17 @@ $default-sort-order:
     $eq: ();	// list to keep values equal pivot
     $hi: ();	// list to keep values higher than pivot
     @if length($list) > 1 {
-        $pivot: nth-get($list, ceil(length($list) / 2));
-        @each $item in $list {
-	    @if is-equal($item, $pivot) { $eq: append($eq, $item); }
-	    @else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
-	    @else { $hi: append($hi, $item); }
-	  } 
-	  @return join(join(quick-sort($lo, $order), $eq), quick-️sort($hi, $order));
+      $pivot: nth-get($list, ceil(length($list) / 2));
+        
+      @each $item in $list {
+	      @if is-equal($item, $pivot) { $eq: append($eq, $item); }
+	      @else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
+	      @else { $hi: append($hi, $item); }
+	    } 
+	    @return join(join(quick-️sort($lo, $order), $eq), quick-️sort($hi, $order));
   }
   @return $list;
 }
-
 
 
 
