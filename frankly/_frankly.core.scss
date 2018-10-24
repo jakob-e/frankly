@@ -7,7 +7,7 @@
 //
 //  ·············································································
 //  ▪ default values
-$default-sort-order:
+$default-sort-order-list:
   "!" "#" "$" "%" "&" "'" "(" ")" "*" "+" "," "-" "." "/" "[" "\\" "]" "^" "_" "{" "|" "}" "~" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"
   "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "æ" "ø" "å"
 !default;
@@ -39,14 +39,14 @@ $default-sort-order:
 
 
 //  ▪ type
-@function is-bool($value: null)    { @return type-of($value) == bool; }
+@function is-bool($value: null) { @return type-of($value) == bool; }
 @function is-number($value: null)  { @return type-of($value) == number; }
 @function is-string($value: null)  { @return type-of($value) == string; }
-@function is-list($value: null)    { @return type-of($value) == list; }
-@function is-map($value: null)     { @return type-of($value) == map; }
+@function is-list($value: null) { @return type-of($value) == list; }
+@function is-map($value: null)   { @return type-of($value) == map; }
 @function is-color($value: null)   { @return type-of($value) == color; } 
 @function is-arglist($value: null) { @return type-of($value) == arglist; }
-@function is-nan($value: null)     { @return not is-number($value); }
+@function is-nan($value: null)   { @return not is-number($value); }
 
 
 
@@ -72,7 +72,7 @@ $default-sort-order:
 @function is-absolute($value: null)  { @return if(list-index(px pt pc in mm cm q, unit-get($value)), true, false); }
 @function is-relative($value: null)  { @return if(list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)), true, false); }
 @function is-angle($value: null)     { @return if(list-index(deg rad turn, unit-get($value)), true, false); } 
-@function is-time($value: null)      { @return if(list-index(ms s, unit-get($value)), true, false); } 
+@function is-time($value: null)   { @return if(list-index(ms s, unit-get($value)), true, false); } 
 @function is-frequency($value: null) { @return if(list-index(hz kHz, unit-get($value)), true, false); } 
 
 
@@ -141,23 +141,23 @@ $default-sort-order:
 //
 //  🔩  List functions
 //
-//  list($args...)                   => list   
-//  list-index($list, $n)            => value      
+//  list($args...)           => list   
+//  list-index($list, $n)         => value     
 //
-//  nth-get($list, $n)               => value     
-//  nth-set($list, $n, $value)       => list
-//  nth-delete($list, $n)            => list
+//  nth-get($list, $n)         => value    
+//  nth-set($list, $n, $value)     => list
+//  nth-delete($list, $n)         => list
 //  nth-index($list, $n)             => n  
 //
 //  first($list)                     => value 
-//  last($list)                      => value 
-//  last-index($list, $value)        => n
+//  last($list)       => value 
+//  last-index($list, $value)      => n
 //
-//  prepend($list, $value)           => list
-//  reverse($list)                   => list
-//  unique($list)                    => list
+//  prepend($list, $value)       => list
+//  reverse($list)           => list
+//  unique($list)               => list
 //
-//  sort($list, $ascending: true)    => list
+//  sort($list, $ascending: true)   => list
 //  
 //  ·············································································
 
@@ -165,21 +165,21 @@ $default-sort-order:
 //  Creates and or reformat a list allowing you to predefine how the 
 //  list should be formatted (space/comma separator and bracketed)
 //  
-//  $list: list()                       creates an empty space separated list without brackets
-//  $list: list((), space, false)       empty space separated list without brackets
-//  $list: list(foo bar, comma)         comma separated list containing foo and bar
+//  $list: list()                  creates an empty space separated list without brackets
+//  $list: list((), space, false)      empty space separated list without brackets
+//  $list: list(foo bar, comma)   comma separated list containing foo and bar
 //  
 //  if the values list contains formatting this will be used unless a format is provided    
-//  $list: list([x, y])                 comma separated bracketed list
+//  $list: list([x, y])     comma separated bracketed list
 //
 //  You can also inherit the format of an existing list by passing that list as format.
 //  This is useful if you want to make list alterations and have the returned list
 //  formatted as the list passed. 
 //
 //  @function ($list) { 
-//     $new-list: (); 
-//     ... do stuff 
-//     @return list($new-list, $list); 
+//   $new-list: (); 
+//   ... do stuff 
+//   @return list($new-list, $list); 
 //  } 
 //
 @function list($args...) { 
@@ -211,8 +211,8 @@ $default-sort-order:
 //  use e.g. when handling conditionals
 //  
 //  @function ($list) {
-//     prop-1: nth-get($list, 2) or something-else; 
-//     prop-2: nth-get($list, 2);   
+//   prop-1: nth-get($list, 2) or something-else; 
+//   prop-2: nth-get($list, 2);   
 //  } 
 //  note! null will cause prop-2 not to render 
 // 
@@ -235,7 +235,7 @@ $default-sort-order:
 //
 //  $list: a b c d;
 //  nth-set($list,  2, 👻)  => a 👻 c d   
-//  nth-set($list, -2, 👻)  => a b 👻 d    
+//  nth-set($list, -2, 👻)  => a b 👻 d   
 //  nth-get($list, 22, 👻)  => a b c d e
 // 
 @function nth-set($list, $n, $value) { 
@@ -343,7 +343,7 @@ $default-sort-order:
 
 //  ▪ unique
 //  Removes duplicate items in a list.
-//  $list: a b a b c d c e;  =>   a b c d e    
+//  $list: a b a b c d c e;  =>   a b c d e 
 @function unique($list) { 
     $result: ();
     @for $i from 1 through length($list) {
@@ -357,29 +357,29 @@ $default-sort-order:
 
 
 
-//  ▪ old – sort
+//  ▪ old – sort
 //  sorts a list containing numbers (including comparable units)
 //  by default the sort order is ascending
 //@function sort($list, $ascending: true) { 
-//    $result: ();
-//    @while length($list) > 0 {
-//        $min: min($list...);
-//        $n: list-index($list, $min);
-//        $list: nth-delete($list, $n);
-//        $result: append($result, $min);
-//    }
-//    @return list(if($ascending, $result, reverse($result)), $list);
+//  $result: ();
+//  @while length($list) > 0 {
+//    $min: min($list...);
+//    $n: list-index($list, $min);
+//    $list: nth-delete($list, $n);
+//    $result: append($result, $min);
+//  }
+//  @return list(if($ascending, $result, reverse($result)), $list);
 //}
 
 //  ▪ sort
 //  Returns a sorted list based on a sort order list  
 //  by default the returned order is ascending
-@function sort($list, $ascending: true, $order: $default-sort-order) {
+@function sort($list, $ascending: true, $order: $default-sort-order-list) {
   $result: quick-️sort($list, $order);
   @return if($ascending, $result, reverse($result));
 }
 
-@function quick-️sort($list, $order: $default-sort-order){
+@function quick-sort($list, $order: $default-sort-order-list) {
     $lo: ();	// list to keep values lower than pivot
     $eq: ();	// list to keep values equal pivot
     $hi: ();	// list to keep values higher than pivot
@@ -387,14 +387,15 @@ $default-sort-order:
       $pivot: nth-get($list, ceil(length($list) / 2));
         
       @each $item in $list {
-	      @if is-equal($item, $pivot) { $eq: append($eq, $item); }
-	      @else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
-	      @else { $hi: append($hi, $item); }
-	    } 
-	    @return join(join(quick-️sort($lo, $order), $eq), quick-️sort($hi, $order));
+	     @if is-equal($item, $pivot) { $eq: append($eq, $item); }
+	     @else if is-before($item, $pivot, $order){ $lo: append($lo, $item); }
+	     @else { $hi: append($hi, $item); }
+	   } 
+	   @return join(join(quick-️sort($lo, $order), $eq), quick-️sort($hi, $order));
   }
   @return $list;
 }
+
 
 
 
@@ -405,9 +406,9 @@ $default-sort-order:
 //
 //  🔩  String functions
 //
-//  str-replace($string, $search, $replace: '')    => string
-//  str-split($string, $delimiter)                 => list
-//  str-join($list, $delimiter)                    => string
+//  str-replace($string, $search, $replace: '') => string
+//  str-split($string, $delimiter)         => list
+//  str-join($list, $delimiter)     => string
 //   
 //
 //
@@ -453,9 +454,9 @@ $default-sort-order:
 //  Returns the map value if the key matches one of the keys in a
 //  map using lists as keys (e.g. wken providing aliases)
 //  $map:(
-//     extra-large xl: 24px,
-//     large lg l: 18px
-//     ...
+//   extra-large xl: 24px,
+//   large lg l: 18px
+//   ...
 //  ) 
 //  map-some($map, l) =>  18px
 //
@@ -505,17 +506,17 @@ $default-sort-order:
 //  ciel-to($number, $decimals)  => number
 //  floor-to($number, $decimals) => number
 //  log($number)                 => number
-//  log10($number)               => number
-//  pow($number, $exponent)      => number
-//  sqrt($number)                => number
+//  log10($number)         => number
+//  pow($number, $exponent)   => number
+//  sqrt($number)            => number
 //  nth-root($number, $exponent) => number
 //  sin($number)                 => number
 //  cos($number)                 => number
 //  tan($number)                 => number
-//  asin($number)                => number
-//  acos($number)                => number
-//  atan($number)                => number
-//  atan2($number, $number)      => number
+//  asin($number)            => number
+//  acos($number)            => number
+//  atan($number)            => number
+//  atan2($number, $number)   => number
 //
 //  bezier()
 //
@@ -528,31 +529,31 @@ $☠️--math-steps: 32 !default;
 
 
 //  ▪ constants
-$E      : 2.71828182845904523536; //  eulers constant
-$PI     : 3.14159265358979323846; //  pi 
-$TAU    : $PI * 2;                //  tau (2π)
+$E    : 2.71828182845904523536; //  eulers constant
+$PI  : 3.14159265358979323846; //  pi 
+$TAU    : $PI * 2;        //  tau (2π)
 $PHI    : 1.61803398874989484820; //  phi 
 $SQRT2  : 1.41421356237309504880; //  square root 2
-$LN2    : 0.6931471805599453;     //  natural logarithm of 2 
+$LN2    : 0.6931471805599453;    //  natural logarithm of 2 
 $LN10   : 2.302585092994046;      //  natural logarithm of 10
 
 //  aliases
 $LOG2   : $LN2;
 $LOG10  : $LN10;
-$e      : $E;     
-$pi     : $PI;
+$e    : $E;    
+$pi  : $PI;
 $phi    : $PHI;
 $tau    : $TAU;
 $ln2    : $LN2;
 $log2   : $LN2;
 $ln10   : $LN10;
 $log10  : $LN10;
-$π      : $PI;     
-$τ      : $TAU; 
-$Τ      : $TAU; 
-$φ      : $PHI;    
-$Φ      : $PHI;    
-$ϕ      : $PHI;    
+$π    : $PI;   
+$τ    : $TAU; 
+$Τ    : $TAU; 
+$φ    : $PHI; 
+$Φ    : $PHI; 
+$ϕ    : $PHI; 
 
 
 
@@ -615,7 +616,7 @@ $ϕ      : $PHI;
 //  ▪ pow
 //  @param {number} $x
 //  @param {number} $exponent
-//    If $x is 0 or below, $exponent needs to be an integer.
+//  If $x is 0 or below, $exponent needs to be an integer.
 @function pow($x, $exponent, $steps: $☠️--math-steps) {
     $exp1: round($exponent);
     $exp2: $exponent - $exp1;
@@ -723,9 +724,9 @@ $ϕ      : $PHI;
 //  @param {P[]} $points
 //  @param {number} $t position 0 .. 1
 //  @param {function(P, P, number) => P} $interpolate [$☠️--interpolate]
-//    The default is a linear interpolation between lists of numbers.
-//    You can specify a custom interpolation function, e.g. to interpolate
-//    between colors.
+//  The default is a linear interpolation between lists of numbers.
+//  You can specify a custom interpolation function, e.g. to interpolate
+//  between colors.
 //  @return {P} A single point.
 @function bezier($points, $t, $interpolate: ☠️--interpolate) {
     @if length($points) > 1 {
@@ -822,44 +823,44 @@ $ϕ      : $PHI;
 //  
 //  🔩  Unit conversion 
 //
-//   Function               Input units
+//   Function            Input units
 //
 //   Absolute length
-//   px(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   pt(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   pc(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   in(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   mm(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   cm(input);             px, pt, pc, in, mm, cm, em, rem, q, number
-//   q(input);              px, pt, pc, in, mm, cm, em, rem, q, number
+//   px(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   pt(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   pc(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   in(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   mm(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   cm(input);    px, pt, pc, in, mm, cm, em, rem, q, number
+//   q(input);        px, pt, pc, in, mm, cm, em, rem, q, number
 //
 //   Relative length
-//   em(input);             px, pt, pc, in, mm, cm, q, em, rem, number
+//   em(input);    px, pt, pc, in, mm, cm, q, em, rem, number
 //   rem(input);            px, pt, pc, in, mm, cm, q, em, rem, number
-//   ex(input);             ex, number
-//   ch(input);             ch, number
-//   vw(input);             vw, number
-//   vh(input);             vh, number
-//   vmin(input);           vmin, number
-//   vmax(input);           vmax, number
+//   ex(input);    ex, number
+//   ch(input);    ch, number
+//   vw(input);    vw, number
+//   vh(input);    vh, number
+//   vmin(input);         vmin, number
+//   vmax(input);         vmax, number
 //
 //   Angle
 //   deg(input);            deg, rad, grad, turn, number
 //   rad(input);            deg, rad, grad, turn, number
-//   grad(input);           deg, rad, grad, turn, number
-//   turn(input);           deg, rad, grad, turn, number
+//   grad(input);         deg, rad, grad, turn, number
+//   turn(input);         deg, rad, grad, turn, number
 //
 //   Resolution
 //   dpi(input);            dpi, dpcm, dppx, number
-//   dpcm(input);           dpi, dpcm, dppx, number
-//   dppx(input);           dpi, dpcm, dppx, number
+//   dpcm(input);         dpi, dpcm, dppx, number
+//   dppx(input);         dpi, dpcm, dppx, number
 //
 //   Time
-//   s(input);              s, ms, number
-//   ms(input);             s, ms, number
+//   s(input);        s, ms, number
+//   ms(input);    s, ms, number
 //
 //   Frequency
-//   hz(input);             hz, khz, number
+//   hz(input);    hz, khz, number
 //   khz(input);            hz, khz, number
 //
 //   String
@@ -867,12 +868,12 @@ $ϕ      : $PHI;
 //
 //   Number, int and uint
 //   num(input);            px, pt, pc, in, mm, cm, q, em, rem, ex, ch,
-//                          vw, vh, vmin, vmax, deg, rad, grad, turn,
-//                          dpi, dpcm, dppx, s, ms, hz, khz, number
+//              vw, vh, vmin, vmax, deg, rad, grad, turn,
+//              dpi, dpcm, dppx, s, ms, hz, khz, number
 //   int(input);            as number
-//   uint(input);           as number
+//   uint(input);         as number
 //
-//   ratio                  number to fraction
+//   ratio          number to fraction
 //
 //   Aliases
 //   string(input);
@@ -982,13 +983,13 @@ $base-font-size: $root-font-size !default;
     // Test against valid CSS units
     $to-unit: map-get((
         px: 0px, pt: 0pt, pc: 0pc, in: 0in, mm: 0mm, cm: 0cm, q: 0q, // absolute length
-        em: 0em, rem: 0rem, ch: 0ch, ex: 0ex,                        // relative length - font based
-        vw: 0vw, vh: 0vh, vmin: 0vmin, vmax: 0vmax,                  // relative length - viewport based
-        deg: 0deg, turn: 0turn, grad: 0grad, rad: 0rad,              // angle
-        s: 0s, ms: 0ms,                                              // time
-        hz: 0Hz, khz: 0kHz,                                          // frequency
+        em: 0em, rem: 0rem, ch: 0ch, ex: 0ex,                  // relative length - font based
+        vw: 0vw, vh: 0vh, vmin: 0vmin, vmax: 0vmax,      // relative length - viewport based
+        deg: 0deg, turn: 0turn, grad: 0grad, rad: 0rad,     // angle
+        s: 0s, ms: 0ms,             // time
+        hz: 0Hz, khz: 0kHz,            // frequency
         dpi: 0dpi, dpcm: 0dpcm, dppx: 0dppx,                         // resolution
-        pct: 0%, percent: 0%, num: 0, number: 0                      // percent or number
+        pct: 0%, percent: 0%, num: 0, number: 0       // percent or number
     ), $unit);
 
     // Error handling – wrong $unit
@@ -1030,7 +1031,7 @@ $base-font-size: $root-font-size !default;
 
     //  Bug fix – LibSass does not natively convert q  
     @if index(q, unit($input)) {
-        $input: num($input) * 1/40 * 1cm;    
+        $input: num($input) * 1/40 * 1cm;   
     } 
 
     // Convert
@@ -1062,3 +1063,117 @@ $base-font-size: $root-font-size !default;
 
 
 
+
+//  ·············································································
+//
+//  Unit testing – not part of core
+//
+//  ·············································································
+@mixin test($function: null, $expected: null, $args...) {
+    @if $function==null {
+        $test: true !global;
+        $report: '' !global;
+        @content;
+        $test: false !global;
+    }
+
+    @else if not function-exists($function) {
+        $report: '' !default;
+        $report: $report+'\a\a#{$function}' !global;
+    }
+
+    @else {
+        $report: '' !default;
+        $ico-pass: '✅';
+        $ico-fail: '❌';
+        $ico-warn: '⚠️';
+
+        $result: call(get-function($function), $args...);
+        $pass: is-equal($result, $expected);
+        
+        //	compare on the least precice decimal provided
+        @if is-number($result) and is-number($expected){
+          $decimals: min(decimals($result), decimals($expected));
+          $pass: is-equal(
+            round-to($result,   $decimals), 
+            round-to($expected, $decimals)
+          );
+        }
+        
+        
+        $report: $report+'\a#{if($pass, $ico-pass, $ico-fail)} #{$function}(#{$args})  =>  #{inspect($result)}';
+
+
+        //	something went wrong
+        @if not $pass {
+            $report: $report+'\a\a  Expected  :  #{type-of($expected)}  `#{inspect($expected)}`';
+            $report: $report+'\a    Result  :  #{type-of($result)}  `#{inspect($result)}`';
+
+            //  type   
+            @if not is-equal(type-of($expected), type-of($result)) {
+                $report: $report+'\a    #{$ico-warn} Type';
+                $report: $report+'\a    Expected  : '+#{type-of($expected)};
+                $report: $report+'\a    Result  : '+#{type-of($result)};
+            }
+
+            @else {
+
+                //	list 
+                @if is-list($result) {
+
+                    // 	length
+                    @if not is-equal(length($expected), length($result)) {
+                        $report: $report+'\a    #{$ico-warn} Length';
+                        $report: $report+'\a    Expected  : #{length($expected)}';
+                        $report: $report+'\a    Result  : #{length($result)}';
+                    }
+
+                    //	separator
+                    @if not is-equal(list-separator($expected), list-separator($result)) {
+                        $report: $report+'\a    #{$ico-warn} Separator';
+                        $report: $report+'\a    Expected  : #{list-separator($expected)}';
+                        $report: $report+'\a    Result  : #{list-separator($result)}';
+                    }
+
+                    //	bracketed
+                    @if not is-equal(is-bracketed($expected), is-bracketed($result)) {
+                        $report: $report+'\a    #{$ico-warn} Bracketed';
+                        $report: $report+'\a    Expected  : #{is-bracketed($expected)}';
+                        $report: $report+'\a    Result  : #{is-bracketed($result)}';
+                    }
+                }
+
+                //	number
+                @if is-number($result) {
+                    $report: $report+'\a    #{$ico-warn} Value';
+                    $report: $report+'\a    Expected  : #{$expected}';
+                    $report: $report+'\a    Result  : #{$result}';
+                    $report: $report+'\a    Deviation : #{$expected - $result}';
+
+                    //	unit
+                    @if not is-equal(unit($expected), unit($result)) {
+						$report: $report+'\a  #{$ico-warn} Unit';
+                    	$report: $report+'\a   Expected  : #{unit($expected)}';
+                    	$report: $report+'\a   Result : #{unit($result)}';
+                    } 
+                }
+                
+                //  string
+                @if is-string($result){
+                  @if not is-equal(str-length($expected), str-length($result)) {
+                    $report: $report+'\a    #{$ico-warn} String Length';
+                    $report: $report+'\a    Expected  : #{str-length($expected)}';
+                    $report: $report+'\a    Result  : #{str-length($result)}';
+                  }
+                }
+            }
+        }
+
+        $report: $report+'\a···············································';
+        $report: $report+'' !global;
+    }
+
+    @if not $test {
+        /*#{$report}*/
+    }
+}
