@@ -470,14 +470,14 @@ $default-sort-order-list:
 //  ▪ map-value-sort
 //  Returns a map sorted by map value
 @function map-value-sort($map, $ascending: true){
-  $sort-list: sort(map-values($map), $ascending);
-  $result: ();
-  @for $i from 1 through length($sort-list) {
-    @each $key, $value in $map {
-      @if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
-    }
-  }   
-  @return $result;
+	$sort-list: sort(map-values($map), $ascending);
+	$result: ();
+	@for $i from 1 through length($sort-list) {
+		@each $key, $value in $map {
+			@if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
+		}
+	}   
+  	@return $result;
 }
 
 
@@ -485,14 +485,14 @@ $default-sort-order-list:
 //  ▪ map-key-sort
 //  Returns a map sorted by map key names
 @function map-key-sort($map, $ascending: true){
-  $sort-list: sort(map-keys($map), $ascending);
-  $result: ();
-  @for $i from 1 through length($sort-list) {
-    @each $key, $value in $map {
-      @if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
-    }
-  }   
-  @return $result;
+	$sort-list: sort(map-keys($map), $ascending);
+	$result: ();
+	@for $i from 1 through length($sort-list) {
+		@each $key, $value in $map {
+			@if $value == nth-get($sort-list, $i) { $result: map-merge($result, ($key:$value)) }
+		}
+	}   
+  	@return $result;
 }
 
 
