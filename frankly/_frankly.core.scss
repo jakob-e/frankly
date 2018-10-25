@@ -17,157 +17,55 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 //  Test and consider if bezier() should stay 
 //  Rework unit conversion – add string to number
 //
-//  Sort – number + alpha
-//  https://hugogiraudel.com/2014/03/18/sassy-sort/
-//  https://github.com/HugoGiraudel/SassySort
-//
 //  ·············································································
 //
 //  🔩   Introspection
 //
 //  ·············································································
 //  ▪ boolean
-@function is-true($value: null) {
-    @return $value==true;
-}
-
-@function is-false($value: null) {
-    @return $value==false;
-}
-
-@function is-null($value: null) {
-    @return $value==null;
-}
-
-@function is-truthy($value: null) {
-    @return not is-falsy($value);
-}
-
-@function is-falsy($value: null) {
-    @return if(list-index(false null 0 '', $value), true, false);
-}
+@function is-true($value: null)   { @return $value == true; }
+@function is-false($value: null)  { @return $value == false; }
+@function is-null($value: null)   { @return $value == null; }
+@function is-truthy($value: null) { @return not is-falsy($value); }
+@function is-falsy($value: null)  { @return if(list-index(false null 0 '', $value), true, false); }
 
 
 
 //  ▪ type
-@function is-bool($value: null) {
-    @return type-of($value) == bool;
-}
-
-@function is-number($value: null) {
-    @return type-of($value) == number;
-}
-
-@function is-string($value: null) {
-    @return type-of($value) == string;
-}
-
-@function is-list($value: null) {
-    @return type-of($value) == list;
-}
-
-@function is-map($value: null) {
-    @return type-of($value) == map;
-}
-
-@function is-color($value: null) {
-    @return type-of($value) == color;
-}
-
-@function is-arglist($value: null) {
-    @return type-of($value) == arglist;
-}
-
-@function is-nan($value: null) {
-    @return not is-number($value);
-}
+@function is-bool($value: null)    { @return type-of($value) == bool; }
+@function is-number($value: null)  { @return type-of($value) == number; }
+@function is-string($value: null)  { @return type-of($value) == string; }
+@function is-list($value: null)    { @return type-of($value) == list; }
+@function is-map($value: null)     { @return type-of($value) == map; }
+@function is-color($value: null)   { @return type-of($value) == color; }
+@function is-arglist($value: null) { @return type-of($value) == arglist; }
+@function is-nan($value: null)     { @return not is-number($value); }
 
 
 
 //  ▪ unit
-@function is-px($value: null) {
-    @return unit-get($value) == px;
-}
+@function is-px($value: null)   { @return unit-get($value) == px; }
+@function is-pt($value: null)   { @return unit-get($value) == pt; }
+@function is-pc($value: null)   { @return unit-get($value) == pc; }
+@function is-in($value: null)   { @return unit-get($value) == in; }
+@function is-mm($value: null)   { @return unit-get($value) == mm; }
+@function is-cm($value: null)   { @return unit-get($value) == cm; }
+@function is-q($value: null)    { @return unit-get($value) == q; }
+@function is-em($value: null)   { @return unit-get($value) == em; }
+@function is-rem($value: null)  { @return unit-get($value) == rem; }
+@function is-vw($value: null)   { @return unit-get($value) == vw; }
+@function is-vw($value: null)   { @return unit-get($value) == vh; }
+@function is-vmin($value: null) { @return unit-get($value) == vmin; }
+@function is-vmax($value: null) { @return unit-get($value) == vmax; }
+@function is-pct($value: null)  { @return unit-get($value) == '%'; }
+@function is-ex($value: null)   { @return unit-get($value) == ex; }
+@function is-ch($value: null)   { @return unit-get($value) == ch; }
 
-@function is-pt($value: null) {
-    @return unit-get($value) == pt;
-}
-
-@function is-pc($value: null) {
-    @return unit-get($value) == pc;
-}
-
-@function is-in($value: null) {
-    @return unit-get($value) == in;
-}
-
-@function is-mm($value: null) {
-    @return unit-get($value) == mm;
-}
-
-@function is-cm($value: null) {
-    @return unit-get($value) == cm;
-}
-
-@function is-q($value: null) {
-    @return unit-get($value) == q;
-}
-
-@function is-em($value: null) {
-    @return unit-get($value) == em;
-}
-
-@function is-rem($value: null) {
-    @return unit-get($value) == rem;
-}
-
-@function is-vw($value: null) {
-    @return unit-get($value) == vw;
-}
-
-@function is-vw($value: null) {
-    @return unit-get($value) == vh;
-}
-
-@function is-vmin($value: null) {
-    @return unit-get($value) == vmin;
-}
-
-@function is-vmax($value: null) {
-    @return unit-get($value) == vmax;
-}
-
-@function is-pct($value: null) {
-    @return unit-get($value) == '%';
-}
-
-@function is-ex($value: null) {
-    @return unit-get($value) == ex;
-}
-
-@function is-ch($value: null) {
-    @return unit-get($value) == ch;
-}
-
-@function is-absolute($value: null) {
-    @return if(list-index(px pt pc in mm cm q, unit-get($value)), true, false);
-}
-
-@function is-relative($value: null) {
-    @return if(list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)), true, false);
-}
-
-@function is-angle($value: null) {
-    @return if(list-index(deg rad turn, unit-get($value)), true, false);
-}
-
-@function is-time($value: null) {
-    @return if(list-index(ms s, unit-get($value)), true, false);
-}
-
-@function is-frequency($value: null) {
-    @return if(list-index(hz kHz, unit-get($value)), true, false);
-}
+@function is-absolute($value: null)  { @return if(list-index(px pt pc in mm cm q, unit-get($value)), true, false); }
+@function is-relative($value: null)  { @return if(list-index(em rem vw vh vmin vmax ex ch '%', unit-get($value)), true, false); }
+@function is-angle($value: null)     { @return if(list-index(deg rad turn, unit-get($value)), true, false); }
+@function is-time($value: null)      { @return if(list-index(ms s, unit-get($value)), true, false); }
+@function is-frequency($value: null) { @return if(list-index(hz kHz, unit-get($value)), true, false); }
 
 
 
@@ -483,6 +381,7 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 //  ▪ sort
 //  Returns a sorted list based on a sort order list  
 //  by default the returned order is ascending
+//  Ref: https://github.com/HugoGiraudel/SassySort
 @function sort($list, $ascending: true, $order: $default-sort-order-list) {
     $result: quick-sort($list, if($ascending, $order, reverse($order)));
     @return list($result, $list);
@@ -670,7 +569,7 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 //
 //  bezier()
 //
-//  https://github.com/xi/sass-planifolia/blob/master/sass/math.scss
+//  Ref: https://github.com/xi/sass-planifolia/blob/master/sass/math.scss
 //
 //  ·············································································
 //  ▪ steps of the taylor expansion
