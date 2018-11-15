@@ -543,6 +543,18 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 //
 //  ·············································································
 
+//  ▪ Tint – lighten a color
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+//  ▪ Shade – darken a color
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+
+
 
 
 
