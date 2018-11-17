@@ -3,11 +3,12 @@
 //  Other ways to create clearfix
 //  display: flow-root              the 'right' way but lacks browser support
 //  overflow: auto                  can cause scroll
-//  padding: 0.016px                can cause space
+//  padding: 0.016px                can cause override 
 //  ·············································································
 @mixin clearfix($extend: false) {
     @include extendable('clearfix', $extend) {
-       &::before, &::after { content: ''; display: table; clear: both; }
+       // &::before, &::after { content: ''; display: table; clear: both; }
+       padding: 0.016px 
     }
 }
 
