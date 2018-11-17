@@ -1,0 +1,57 @@
+//  ·············································································
+//
+//  ⚒️  Quantity Query
+//
+//  @include qq($query){ ... }
+//
+//  Query 
+//  min 2 | at least 2 | from 2                         at-least
+//  max 2 | at most 2 | to 2                            at-most
+//  equal 2 | exactly 2                                 equal
+//  min 2 max 4 | from 2 to 4 | at least 2 at most 4    range                 
+//
+//  ·············································································
+@mixin qq($query){
+  $eq:  index-some($query, equal, exactly);
+  $min: index-some($query, min, least, from) or $eq;
+  $min: if($min, nth($query, $min + 1), null); 
+  $max: index-some($query, max, most, to) or $eq;
+  $max: if($max, nth($query, $max + 1), null); 
+
+  $list:();
+  $last: null;
+  //  loop through selectors to find the last selector of each part
+  //  the "alphabet" loop is just a simple way to listify selectors
+  //  (if the selector has more than 26 parts – you're on your own)
+  @each $selector in & {
+    @each $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $n, $o, $p, $q, $r, $s, $t, $u, $v, $w, $x, $y, $z in $selector {
+      $list: append($list, $a $b $c $d $e $f $g $h $i $j $k $l $m $n $o $p $q $r $s $t $u $v $w $x $y $z);
+    }
+    $last: nth($list, length($list));
+  }
+
+  @if $min and $max {
+    &:nth-last-child(n+#{$min}):nth-last-child(-n+#{$max}):first-child, 
+    &:nth-last-child(n+#{$min}):nth-last-child(-n+#{$max}):first-child ~ #{$last} { @content; }        
+  }
+  @else if $min {
+    &:nth-last-child(n+#{$min}), 
+    &:nth-last-child(n+#{$min}) ~ #{$last} { @content; }    
+  }
+  @else if $max {
+    &:nth-last-child(-n+#{$max}):first-child, 
+    &:nth-last-child(-n+#{$max}):first-child ~ #{$last} { @content; }     
+  }
+}
+
+
+
+//  ·············································································
+//  ⚒️  Clearfix
+//  
+//  ·············································································
+@mixin clearfix($extend: false) {
+    @include extendable('clearfix', $extend) {
+       &::before, &::after { content: ''; display: table; clear: both; }
+    }
+}
