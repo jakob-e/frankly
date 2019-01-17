@@ -73,7 +73,7 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 //  Compares two values based on value, type and unit
 //  (libsass will falsely equal 500 and 500px)
 @function is-equal($a, $b) {
-    @return type-of($a) == type-of($b) and $a and $b and $a+''==$b+''or not $a and not $b;
+    @return type-of($a) == type-of($b) and $a and $b and str($a) == str($b) or not $a and not $b;
 }
 
 
@@ -297,10 +297,8 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 
     @for $n from 1 through length($list) {
         @if is-equal(nth-get($list, $n), $value) {
-            @return $n
+            @return $n;
         }
-
-        ;
     }
 
     @return null;
@@ -326,10 +324,8 @@ $default-sort-order-list: "!""#""$""%""&""'""("")""*""+"",""-"".""/""[""\\""]""^
 
     @for $n from length($list) through 1 {
         @if is-equal(nth($list, $n), $value) {
-            @return $n
+            @return $n;
         }
-
-        ;
     }
 
     @return null;
