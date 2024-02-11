@@ -1,0 +1,92 @@
+// ------------------------------------------------------------
+//  Frankly Config 
+// ------------------------------------------------------------
+@use './core/map';
+
+
+// ------------------------------------------------------------
+//  Default maps 
+// ------------------------------------------------------------
+$path-map:   () !default;
+$layer-map:  () !default;
+$color-map:  () !default;
+$font-map:   () !default; 
+$media-map : () !default;
+
+
+
+// ------------------------------------------------------------
+//  Color Map
+// ------------------------------------------------------------
+@function color-map($key: null) {
+    $map: (
+        // 
+        schemes-enabled: light,
+        
+        // defaults
+        'inherit': inherit,
+        'current': currentcolor,
+
+        'none':  transparent,
+        'white': white,
+        'black': black,
+        'gray':  gray,
+
+        // schemes
+        light: (),
+        dark: ()
+    );
+
+    $map: map.merge($map, $color-map);
+    $map: if($key, map.get($map, $key), $map);
+    @return $map;
+}
+
+
+
+// ------------------------------------------------------------
+//  Font Map
+// ------------------------------------------------------------
+@function font-map($key: null) {
+    $map: (
+        bound-lower: 20rem,
+        bound-upper: 80rem,
+
+        system-sans : (-apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif,  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"),
+        system-serif: (ui-serif, Georgia, Cambria, "Times New Roman", Times, serif),
+        system-mono : (ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace),
+        
+        display: null,
+    );
+
+    $map: map.merge($map, $font-map);
+    $map: if($key, map.get($map, $key), $map);
+    @return $map;    
+}
+
+
+
+// ------------------------------------------------------------
+//  Internal Tokens
+// ------------------------------------------------------------
+@function token($module: null, $key: null) {
+    $map: (
+        // fonts 
+        font-face:   (name: 'frankly.font-face',   prefix: null),
+        font-family: (name: 'frankly.font-family', prefix: '--ff'),
+        font-size:   (name: 'frankly.font-size',   prefix: '--fs'),
+        font-weight: (name: 'frankly.font-weight', prefix: '--fw'),
+        font-height: (name: 'frankly.font-height', prefix: '--lh'),
+        font-space:  (name: 'frankly.font-space',  prefix: '--ls'),
+        font-style:  (name: 'frankly.font-style',  prefix: '--fi'),
+
+        // colors
+        color-swatch: (name: 'frankly.color-swatch', prefix: '--cs'),
+        color-mix:    (name: 'frankly.color-mix',    prefix: '--cm')
+    );
+
+    @if not $module and not $key { @return $map; }
+    @if $module and not $key { @return map.get($map, $module); }
+    @return map.get(map.get($map, $module),$key)
+}
+
