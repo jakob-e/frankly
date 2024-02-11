@@ -7,11 +7,11 @@
 // ------------------------------------------------------------
 //  Default maps 
 // ------------------------------------------------------------
-$path-map:   () !default;
-$layer-map:  () !default;
-$color-map:  () !default;
-$font-map:   () !default; 
-$media-map : () !default;
+$path-map:  () !default;
+$layer-map: () !default;
+$color-map: () !default;
+$font-map:  () !default; 
+$media-map: () !default;
 
 
 
@@ -20,7 +20,7 @@ $media-map : () !default;
 // ------------------------------------------------------------
 @function color-map($key: null) {
     $map: (
-        // 
+        // enabled schemes 
         schemes-enabled: light,
         
         // defaults
