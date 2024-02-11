@@ -4,6 +4,7 @@
 @use './core/map';
 
 
+
 // ------------------------------------------------------------
 //  Default maps 
 // ------------------------------------------------------------
@@ -65,6 +66,33 @@ $media-map: () !default;
 }
 
 
+
+
+
+// ------------------------------------------------------------
+// Breakpoints
+// ------------------------------------------------------------
+//
+//               20rem         30rem         40rem         60rem         80rem        100rem 
+//  0            320px         480px         640px         960px        1280px        1600px 
+//  |–––––––––––––|–––––––––––––|–––––––––––––|–––––––––––––|–––––––––––––|–––––––––––––|––––––>
+//  xxs           xs            sm            md            lg            xl            xxl      
+//  mobile                                    tablet        desktop      
+//  mobile-small  mobile-large  mobile-landscape            tablet-landscape
+//  all                                                                   
+// 
+@function media-map($key: null) {
+    $map: (
+        xxs mobile mobile-small all       :   0rem,  //    0px
+        xs  mobile-large                  :  20rem,  //  320px
+        sm  small mobile-landscape        :  30rem,  //  480px
+        md  medium tablet                 :  40rem,  //  640px
+        lg  large desktop tablet-landscape:  60rem,  //  960px
+        xl                                :  80rem,  // 1280px
+        xxl                               :  90rem,  // 1440px,
+        xxxl                              : 100rem,  // 1600px,
+    );
+);
 
 // ------------------------------------------------------------
 //  Internal Tokens
